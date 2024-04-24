@@ -12,7 +12,9 @@ type Binding = {
 }
 
 export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', async (context) => {
-  console.log(context.req)
+  const body = await context.req.json()
+  console.log(JSON.stringify(body))
+
   const config = get_config(context.env)
   const bot = new Bot<CustomContext>(config.BOT_TOKEN, { botInfo: bot_info })
 
