@@ -1,14 +1,13 @@
 import type { CustomContext } from '@/bot/types'
-import type { AutoChatActionFlavor } from '@grammyjs/auto-chat-action'
 import { Router } from '@grammyjs/router'
 import Groq from 'groq-sdk'
 
-const router = new Router<CustomContext & AutoChatActionFlavor>((context) => context.session.history)
+const router = new Router<CustomContext>((context) => context.session.history)
 
 router.route('chat').on('message:text', async (context) => {
   context.chatAction = 'typing'
 
-  const groq = new Groq()
+  const groq = new Groq({ apiKey: context.config.GROQ_API_KEY })
   const chat_completion = await groq.chat.completions.create({
     messages: [{ role: 'user', content: context.message.text ?? '' }],
     model: 'llama3-70b-8192',

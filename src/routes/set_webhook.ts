@@ -1,3 +1,4 @@
+import { bot_info } from '@/bot'
 import { get_config } from '@/config.js'
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { Bot } from 'grammy'
@@ -42,7 +43,7 @@ const send_set_webhook_request = async (
   const webhook_url = `${new URL(url).origin}${path}`
 
   try {
-    await new Bot(bot_token).api.setWebhook(webhook_url)
+    await new Bot(bot_token, { botInfo: bot_info }).api.setWebhook(webhook_url)
   } catch {
     return undefined
   }

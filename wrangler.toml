@@ -3,3 +3,6 @@ main = "src/index.ts"
 compatibility_flags = ["nodejs_compat", "nodejs_als"]
 compatibility_date = "2023-03-25"
 minify = true
+
+[placement]
+mode = "smart"
