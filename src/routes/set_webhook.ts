@@ -1,5 +1,5 @@
 import { bot_info } from '@/bot'
-import { get_config } from '@/config.js'
+import { get_config } from '@/config'
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { Bot } from 'grammy'
 
