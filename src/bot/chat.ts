@@ -2,7 +2,7 @@ import type { CustomContext } from '@/bot/types'
 import { Router } from '@grammyjs/router'
 import Groq from 'groq-sdk'
 
-const router = new Router<CustomContext>((context) => context.session.history)
+const router = new Router<CustomContext>((context) => context.session.user)
 
 router.route('chat').on('message:text', async (context) => {
   context.chatAction = 'typing'
