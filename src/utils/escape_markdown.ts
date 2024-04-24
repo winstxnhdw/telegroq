@@ -1,7 +1,6 @@
 const special_characters = [
   '\\',
   '_',
-  '*',
   '[',
   ']',
   '(',
