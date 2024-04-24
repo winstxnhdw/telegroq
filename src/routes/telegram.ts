@@ -1,9 +1,10 @@
 import { bot_info } from '@/bot'
 import type { CustomContext, SessionData } from '@/bot/types'
 import { get_config } from '@/config'
+import { escape_markdown } from '@/utils/escape_markdown.js'
 import { autoChatAction } from '@grammyjs/auto-chat-action'
 import { autoRetry } from '@grammyjs/auto-retry'
-import { type ParseModeFlavor, hydrateReply, parseMode } from '@grammyjs/parse-mode'
+import { type ParseModeFlavor, hydrateReply } from '@grammyjs/parse-mode'
 import { KvAdapter } from '@grammyjs/storage-cloudflare'
 import { Bot, lazySession, webhookCallback } from 'grammy'
 import Groq from 'groq-sdk'
@@ -17,6 +18,7 @@ export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', asyn
   const config = get_config(context.env)
   const bot = new Bot<ParseModeFlavor<CustomContext>>(config.BOT_TOKEN, { botInfo: bot_info })
 
+  bot.api.config.use(autoRetry())
   bot.use(autoChatAction())
   bot.use(hydrateReply)
   bot.use(
@@ -30,9 +32,6 @@ export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', asyn
     context.config = config
     await next()
   })
-
-  bot.api.config.use(autoRetry())
-  bot.api.config.use(parseMode('MarkdownV2'))
 
   // bot.use(chat)
 
@@ -49,7 +48,7 @@ export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', asyn
     })
 
     return context.replyWithMarkdownV2(
-      chat_completion.choices[0]?.message.content ?? 'There was an error with the chat bot!',
+      escape_markdown(chat_completion.choices[0]?.message.content ?? 'There was an error with the chat bot!'),
     )
   })
 
