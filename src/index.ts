@@ -1,8 +1,8 @@
-import { json } from '@/middlewares'
 import { delete_webhook, set_webhook } from '@/routes'
 import { telegram } from '@/routes/telegram'
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
+import { prettyJSON } from 'hono/pretty-json'
 
 function main() {
   const openapi_documentation_route = '/openapi.json'
@@ -15,7 +15,7 @@ function main() {
   })
 
   return app
-    .use(json())
+    .use(prettyJSON())
     .get('/docs', swaggerUI({ url: openapi_documentation_route }))
     .route('/', set_webhook)
     .route('/', delete_webhook)

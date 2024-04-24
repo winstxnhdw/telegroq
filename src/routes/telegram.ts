@@ -11,7 +11,9 @@ type Binding = {
   telegroq: KVNamespace
 }
 
-export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', async (context) => {
+const telegram = new Hono<{ Bindings: Binding }>()
+
+telegram.post('/telegram', async (context) => {
   const body = await context.req.json()
   console.log(JSON.stringify(body))
 
@@ -36,3 +38,11 @@ export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', asyn
 
   return webhookCallback(bot, 'cloudflare-mod')(context.req)
 })
+
+telegram.get('/telegram', async (context) => {
+  const config = get_config(context.env)
+  const bot = new Bot<CustomContext>(config.BOT_TOKEN, { botInfo: bot_info })
+  return webhookCallback(bot, 'cloudflare-mod')(context.req)
+})
+
+export { telegram }
