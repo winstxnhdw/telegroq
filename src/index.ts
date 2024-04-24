@@ -9,7 +9,7 @@ function main() {
     openapi: '3.1.0',
     info: {
       version: '1.0.0',
-      title: 'worker',
+      title: 'telegroq',
     },
   })
 
