@@ -2,6 +2,7 @@ name = "telegroq"
 main = "src/index.ts"
 compatibility_flags = ["nodejs_compat", "nodejs_als"]
 compatibility_date = "2023-03-25"
+node_compat = true
 minify = true
 
 [placement]
