@@ -1,6 +1,7 @@
+import { set_webhook } from '@/routes/set_webhook'
+import { telegram } from '@/routes/telegram'
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { cors } from 'hono/cors'
 
 function main() {
   const openapi_documentation_route = '/openapi.json'
@@ -12,10 +13,10 @@ function main() {
     },
   })
 
-  app.get('/docs', swaggerUI({ url: openapi_documentation_route }))
-  app.use(cors())
-
   return app
+    .get('/docs', swaggerUI({ url: openapi_documentation_route }))
+    .route('/', set_webhook)
+    .route('/', telegram)
 }
 
 export default main()
