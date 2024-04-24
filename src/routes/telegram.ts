@@ -7,6 +7,7 @@ import { autoRetry } from '@grammyjs/auto-retry'
 import { type ParseModeFlavor, hydrateReply } from '@grammyjs/parse-mode'
 import { KvAdapter } from '@grammyjs/storage-cloudflare'
 import { Bot, lazySession, webhookCallback } from 'grammy'
+import { ignoreOld } from 'grammy-middlewares'
 import Groq from 'groq-sdk'
 import { Hono } from 'hono'
 
@@ -21,6 +22,7 @@ export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', asyn
   bot.api.config.use(autoRetry())
   bot.use(autoChatAction())
   bot.use(hydrateReply)
+  bot.use(ignoreOld())
   bot.use(
     lazySession({
       initial: (): SessionData => ({ user: '', history: '' }),
