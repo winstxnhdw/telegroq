@@ -34,5 +34,5 @@ export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', asyn
 
   bot.use(chat)
 
-  return webhookCallback(bot, 'hono')(context.req)
+  return webhookCallback(bot, 'cloudflare-mod')(context.req)
 })
