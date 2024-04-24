@@ -1,7 +1,6 @@
 import { bot_info } from '@/bot'
 import type { CustomContext, SessionData } from '@/bot/types'
 import { get_config } from '@/config'
-import { escape_markdown } from '@/utils/escape_markdown.js'
 import { autoChatAction } from '@grammyjs/auto-chat-action'
 import { autoRetry } from '@grammyjs/auto-retry'
 import { type ParseModeFlavor, hydrateReply } from '@grammyjs/parse-mode'
@@ -10,6 +9,7 @@ import { Bot, lazySession, webhookCallback } from 'grammy'
 import { ignoreOld } from 'grammy-middlewares'
 import Groq from 'groq-sdk'
 import { Hono } from 'hono'
+import { parseInline } from 'marked'
 
 type Binding = {
   telegroq: KVNamespace
@@ -49,8 +49,8 @@ export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', asyn
       model: 'llama3-70b-8192',
     })
 
-    return context.replyWithMarkdownV2(
-      escape_markdown(chat_completion.choices[0]?.message.content ?? 'There was an error with the chat bot!'),
+    return context.replyWithHTML(
+      await parseInline(chat_completion.choices[0]?.message.content ?? 'There was an error with the chat bot!'),
     )
   })
 
