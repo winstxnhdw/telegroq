@@ -1,5 +1,5 @@
 import { bot_info } from '@/bot'
-import { ignore_old } from '@/bot/middlewares/ignore_old.js'
+import { ignore_old } from '@/bot/middlewares'
 import type { CustomContext, SessionData } from '@/bot/types'
 import { get_config } from '@/config'
 import { autoChatAction } from '@grammyjs/auto-chat-action'
