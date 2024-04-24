@@ -3,6 +3,7 @@ import type { CustomContext, SessionData } from '@/bot/types'
 import { get_config } from '@/config'
 import { autoChatAction } from '@grammyjs/auto-chat-action'
 import { autoRetry } from '@grammyjs/auto-retry'
+import { type ParseModeFlavor, hydrateReply, parseMode } from '@grammyjs/parse-mode'
 import { KvAdapter } from '@grammyjs/storage-cloudflare'
 import { Bot, lazySession, webhookCallback } from 'grammy'
 import Groq from 'groq-sdk'
@@ -13,13 +14,11 @@ type Binding = {
 }
 
 export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', async (context) => {
-  console.log(JSON.stringify(await context.req.json()))
-
   const config = get_config(context.env)
-  const bot = new Bot<CustomContext>(config.BOT_TOKEN, { botInfo: bot_info })
+  const bot = new Bot<ParseModeFlavor<CustomContext>>(config.BOT_TOKEN, { botInfo: bot_info })
 
-  bot.api.config.use(autoRetry())
   bot.use(autoChatAction())
+  bot.use(hydrateReply)
   bot.use(
     lazySession({
       initial: (): SessionData => ({ user: '', history: '' }),
@@ -31,6 +30,9 @@ export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', asyn
     context.config = config
     await next()
   })
+
+  bot.api.config.use(autoRetry())
+  bot.api.config.use(parseMode('MarkdownV2'))
 
   // bot.use(chat)
 
@@ -46,9 +48,9 @@ export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', asyn
       model: 'llama3-70b-8192',
     })
 
-    return context.reply(chat_completion.choices[0]?.message.content ?? 'There was an error with the chat bot!', {
-      parse_mode: 'HTML',
-    })
+    return context.replyWithMarkdownV2(
+      chat_completion.choices[0]?.message.content ?? 'There was an error with the chat bot!',
+    )
   })
 
   return webhookCallback(bot, 'hono')(context)
