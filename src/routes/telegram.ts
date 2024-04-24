@@ -46,7 +46,9 @@ export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', asyn
       model: 'llama3-70b-8192',
     })
 
-    return context.reply(chat_completion.choices[0]?.message.content ?? 'There was an error with the chat bot!')
+    return context.reply(chat_completion.choices[0]?.message.content ?? 'There was an error with the chat bot!', {
+      parse_mode: 'HTML',
+    })
   })
 
   return webhookCallback(bot, 'hono')(context)
