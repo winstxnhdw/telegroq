@@ -1,4 +1,5 @@
 import { bot_info } from '@/bot'
+import { ignore_old } from '@/bot/middlewares/ignore_old.js'
 import type { CustomContext, SessionData } from '@/bot/types'
 import { get_config } from '@/config'
 import { autoChatAction } from '@grammyjs/auto-chat-action'
@@ -6,7 +7,6 @@ import { autoRetry } from '@grammyjs/auto-retry'
 import { type ParseModeFlavor, hydrateReply } from '@grammyjs/parse-mode'
 import { KvAdapter } from '@grammyjs/storage-cloudflare'
 import { Bot, lazySession, webhookCallback } from 'grammy'
-import { ignoreOld } from 'grammy-middlewares'
 import Groq from 'groq-sdk'
 import { Hono } from 'hono'
 import { parseInline } from 'marked'
@@ -22,7 +22,7 @@ export const telegram = new Hono<{ Bindings: Binding }>().post('/telegram', asyn
   bot.api.config.use(autoRetry())
   bot.use(autoChatAction())
   bot.use(hydrateReply)
-  bot.use(ignoreOld())
+  bot.use(ignore_old())
   bot.use(
     lazySession({
       initial: (): SessionData => ({ user: '', history: '' }),
