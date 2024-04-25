@@ -49,7 +49,7 @@ export const add_member = new OpenAPIHono<HonoContext>().openapi(route, async (c
   const username = context.req.query('user')
 
   if (!username) {
-    return context.json({ error: 'Invalid username!' })
+    return context.json({ error: 'Invalid username!' }, 500)
   }
 
   const members = await context.env.telegroq.get('members', 'text')
