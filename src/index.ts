@@ -1,5 +1,5 @@
 import { bearer_auth } from '@/middlewares'
-import { delete_webhook, set_webhook } from '@/routes'
+import { add_member, delete_webhook, set_webhook } from '@/routes'
 import { telegram } from '@/routes/telegram'
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
@@ -21,6 +21,7 @@ function main() {
     .get('/docs', swaggerUI({ url: openapi_documentation_route }))
     .route('/admin', set_webhook)
     .route('/admin', delete_webhook)
+    .route('/admin', add_member)
     .route('/', telegram)
 }
 

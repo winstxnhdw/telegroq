@@ -1,7 +1,4 @@
-import { bot_info } from '@/bot'
-import { get_config } from '@/config'
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
-import { Bot } from 'grammy'
 
 const ResponseSchema = z.object({
   message: z.string(),
@@ -13,7 +10,7 @@ const ResponseErrorSchema = z.object({
 
 const route = createRoute({
   method: 'get',
-  path: '/set_webhook',
+  path: '/add_member',
   security: [
     {
       Bearer: [],
@@ -48,37 +45,16 @@ const route = createRoute({
   },
 })
 
-const send_set_webhook_request = async (
-  bot_token: string,
-  url: string,
-  path: `/${string}`,
-): Promise<string | undefined> => {
-  const webhook_url = `${new URL(url).origin}${path}`
+const add_member = new OpenAPIHono()
 
-  try {
-    await new Bot(bot_token, { botInfo: bot_info }).api.setWebhook(webhook_url)
-  } catch {
-    return undefined
-  }
-
-  return webhook_url
-}
-
-const set_webhook = new OpenAPIHono()
-
-set_webhook.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
+add_member.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
   type: 'http',
   scheme: 'bearer',
   bearerFormat: 'JWT',
 })
 
-set_webhook.openapi(route, async (context) => {
-  const config = get_config(context.env)
-  const webhook_url = await send_set_webhook_request(config.BOT_TOKEN, context.req.url, '/telegram')
-
-  return webhook_url
-    ? context.json({ message: `${webhook_url} has been successfully set as the Telegram webhook endpoint!` })
-    : context.json({ error: 'Failed to set the webhook!' } as const, 500)
+add_member.openapi(route, async (context) => {
+  return context.json({ message: 'hello' })
 })
 
-export { set_webhook }
+export { add_member }
