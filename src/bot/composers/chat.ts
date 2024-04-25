@@ -14,12 +14,12 @@ type Message = {
 const summarise_context = async (context: GrammyContext, messages: Message[]): Promise<Message[]> => {
   const context_to_summarise = messages.map(({ content }) => content).join('\n')
 
-  const summary = await context.env.ai.run('@cf/facebook/bart-large-cnn', {
+  const result = await context.env.ai.run('@cf/facebook/bart-large-cnn', {
     input_text: context_to_summarise,
     max_length: 8192,
   })
 
-  return [{ role: 'system', content: summary }]
+  return [{ role: 'system', content: result.summary }]
 }
 
 chat.on('message:text', async (context) => {

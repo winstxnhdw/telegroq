@@ -1,8 +1,16 @@
 import type { get_config } from '@/config'
 
+type BartLargeCNNOptions = {
+  input_text: string
+  max_length: number
+}
+
+type BartLargeCNNResponse = {
+  summary: string
+}
+
 type AI = {
-  // biome-ignore lint/suspicious/noExplicitAny: no type available yet
-  run(model: string, ...args: unknown[]): Promise<any>
+  run(model: '@cf/facebook/bart-large-cnn', options: BartLargeCNNOptions): Promise<BartLargeCNNResponse>
 }
 
 export type Bindings = ReturnType<typeof get_config> & {
