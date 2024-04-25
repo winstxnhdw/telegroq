@@ -8,7 +8,7 @@ clear_command.command('clear', async (context) => {
   if (!context.from?.username) return
   if (await is_not_member(context.env.telegroq, context.from.username)) return
 
-  context.env.telegroq.delete(context.from.username)
+  await context.env.telegroq.delete(context.from.username)
   await context.reply('All context has been cleared!')
 })
 
