@@ -1,5 +1,2 @@
-export { add_member } from '@/routes/add_member'
-export { delete_webhook } from '@/routes/delete_webhook'
-export { set_webhook } from '@/routes/set_webhook'
+export { admin } from '@/routes/admin'
 export { telegram } from '@/routes/telegram'
-export { remove_member } from '@/routes/remove_member'

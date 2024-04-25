@@ -14,7 +14,10 @@ chat.on('message:text', async (context) => {
 
   const groq = new Groq({ apiKey: context.env.GROQ_API_KEY })
   const chat_completion = await groq.chat.completions.create({
-    messages: [{ role: 'user', content: context.message.text ?? '' }],
+    messages: [
+      { role: 'system', content: 'start' },
+      { role: 'user', content: context.message.text ?? '' },
+    ],
     model: 'llama3-70b-8192',
   })
 

@@ -1,3 +1,4 @@
+import { is_member } from '@/kv'
 import type { HonoContext } from '@/types'
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 
@@ -10,13 +11,14 @@ const ResponseSchema = z.object({
 })
 
 const ResponseErrorSchema = z.object({
-  error: z.literal('Invalid username!'),
+  error: z.string(),
 })
 
 const route = createRoute({
   method: 'get',
-  path: '/add_member',
+  path: '/remove_member',
   request: { query: QuerySchema },
+  security: [{ Bearer: [] }],
   responses: {
     200: {
       content: {
@@ -46,19 +48,11 @@ const route = createRoute({
   },
 })
 
-const add_member = new OpenAPIHono<HonoContext>()
+export const remove_member = new OpenAPIHono<HonoContext>().openapi(route, async (context) => {
+  const username = context.req.query('user') ?? ''
+  const member = await is_member(context.env.telegroq, username)
 
-add_member.openapi(route, async (context) => {
-  const username = context.req.query('user')
-
-  if (!username) {
-    return context.json({ error: 'Invalid username!' })
-  }
-
-  const members = await context.env.telegroq.get('members', 'text')
-  context.env.telegroq.put('members', `${username}\n${members ?? ''}`)
-
-  return context.json({ message: `Successfully added ${username} to the list of members!` })
+  return member
+    ? context.json({ message: `${username} has been removed from the list of members!` })
+    : context.json({ error: `${username} is not found!` })
 })
-
-export { add_member }
