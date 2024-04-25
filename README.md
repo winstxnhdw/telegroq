@@ -1,6 +1,11 @@
 # telegroq
 
-A batteries-included [Hono](https://hono.dev/) boilerplate for [Cloudflare Workers](https://workers.cloudflare.com/) with [OpenAPI Swagger UI](https://swagger.io/specification/).
+[![main.yml](https://github.com/winstxnhdw/telegroq/actions/workflows/main.yml/badge.svg)](https://github.com/winstxnhdw/telegroq/actions/workflows/main.yml)
+[![deploy.yml](https://github.com/winstxnhdw/telegroq/actions/workflows/deploy.yml/badge.svg)](https://github.com/winstxnhdw/telegroq/actions/workflows/deploy.yml)
+[![test.yml](https://github.com/winstxnhdw/telegroq/actions/workflows/test.yml/badge.svg)](https://github.com/winstxnhdw/telegroq/actions/workflows/test.yml)
+[![formatter.yml](https://github.com/winstxnhdw/telegroq/actions/workflows/formatter.yml/badge.svg)](https://github.com/winstxnhdw/telegroq/actions/workflows/formatter.yml)
+
+A chat bot on Telegram, powered by [Hono](https://hono.dev/), [Cloudflare Workers](https://workers.cloudflare.com/), [OpenAPI Swagger UI](https://swagger.io/specification/), [grammY](https://grammy.dev/), and [Groq](https://groq.com/).
 
 ## Development
 
