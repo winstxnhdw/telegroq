@@ -11,45 +11,42 @@ type Message = {
   content: string
 }
 
+const summarise_context = async (context: GrammyContext, messages: Message[]): Promise<Message[]> => {
+  const context_to_summarise = messages.map(({ content }) => content).join('\n')
+
+  const summary = await context.env.ai.run('@cf/facebook/bart-large-cnn', {
+    input_text: context_to_summarise,
+    max_length: 8192,
+  })
+
+  return [{ role: 'system', content: summary }]
+}
+
 chat.on('message:text', async (context) => {
   if (!context.from.username) return
   if (await is_not_member(context.env.telegroq, context.from.username)) return
 
   context.chatAction = 'typing'
 
-  const messages = await context.env.telegroq.get<Message[]>(context.from.username, 'json')
+  const history = await context.env.telegroq.get<Message[]>(context.from.username, 'json')
   const question = { role: 'user', content: context.message.text } as Message
-  let new_messages = messages ? [...messages, question] : [question]
+  const messages = history ? [...history, question] : [question]
   const groq = new Groq({ apiKey: context.env.GROQ_API_KEY })
   const chat_completion = await groq.chat.completions.create({
-    messages: new_messages,
+    messages: messages,
     model: 'llama3-70b-8192',
   })
 
   const response = chat_completion.choices[0]?.message.content
-  const total_tokens = chat_completion.usage?.total_tokens
 
   if (!response) {
     return context.reply('There was an error with the chat bot!')
   }
 
-  new_messages.push({ role: 'assistant', content: response })
-
-  if (total_tokens && total_tokens > 8192) {
-    const context_to_summarise = new_messages
-      .slice(0, -2)
-      .map(({ content }) => content)
-      .join('\n')
-
-    const summary: string = await context.env.ai.run('@cf/facebook/bart-large-cnn', {
-      input_text: context_to_summarise,
-      max_length: 4096,
-    })
-
-    new_messages = [{ role: 'system', content: summary }, ...new_messages.slice(-2)]
-  }
-
-  await context.env.telegroq.put(context.from.username, JSON.stringify(new_messages))
+  messages.push({ role: 'assistant', content: response })
+  const total_tokens = chat_completion.usage?.total_tokens
+  const message_to_store = total_tokens && total_tokens > 8192 ? summarise_context(context, messages) : messages
+  await context.env.telegroq.put(context.from.username, JSON.stringify(message_to_store))
 
   return context.replyWithHTML(await parseInline(response))
 })
