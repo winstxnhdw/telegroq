@@ -14,6 +14,11 @@ const ResponseErrorSchema = z.object({
 const route = createRoute({
   method: 'get',
   path: '/set_webhook',
+  security: [
+    {
+      Bearer: [],
+    },
+  ],
   responses: {
     200: {
       content: {
@@ -51,7 +56,15 @@ const send_set_webhook_request = async (
   return webhook_url
 }
 
-export const set_webhook = new OpenAPIHono().openapi(route, async (context) => {
+const set_webhook = new OpenAPIHono()
+
+set_webhook.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
+  type: 'http',
+  scheme: 'bearer',
+  in: 'header',
+})
+
+set_webhook.openapi(route, async (context) => {
   const config = get_config(context.env)
   const webhook_url = await send_set_webhook_request(config.BOT_TOKEN, context.req.url, '/telegram')
 
@@ -59,3 +72,5 @@ export const set_webhook = new OpenAPIHono().openapi(route, async (context) => {
     ? context.json({ message: `${webhook_url} has been successfully set as the Telegram webhook endpoint!` })
     : context.json({ error: 'Failed to set the webhook!' } as const, 500)
 })
+
+export { set_webhook }
