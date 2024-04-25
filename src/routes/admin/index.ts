@@ -3,6 +3,7 @@ import { delete_webhook } from '@/routes/admin/delete_webhook'
 import { remove_member } from '@/routes/admin/remove_member'
 import { set_webhook } from '@/routes/admin/set_webhook'
 import { OpenAPIHono } from '@hono/zod-openapi'
+import { bearerAuth } from 'hono/bearer-auth'
 
 const admin = new OpenAPIHono()
 
@@ -12,9 +13,11 @@ admin.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
   bearerFormat: 'JWT',
 })
 
-admin.route('/admin', set_webhook)
-admin.route('/admin', delete_webhook)
-admin.route('/admin', add_member)
-admin.route('/admin', remove_member)
+admin
+  .use('/admin/*', bearerAuth({ verifyToken: (token, context) => token === context.env.AUTH_TOKEN }))
+  .route('/admin', set_webhook)
+  .route('/admin', delete_webhook)
+  .route('/admin', add_member)
+  .route('/admin', remove_member)
 
 export { admin }

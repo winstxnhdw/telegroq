@@ -29,9 +29,7 @@ const route = createRoute({
     },
     401: {
       content: {
-        'text/plain': {
-          schema: z.literal('Unauthorized'),
-        },
+        'text/plain': { schema: z.literal('Unauthorized') },
       },
       description: 'The response when the request is unauthorized.',
     },

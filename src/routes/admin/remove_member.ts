@@ -25,17 +25,15 @@ const route = createRoute({
         'application/json': {
           schema: ResponseSchema,
           example: {
-            message: 'https://example.com/telegram has been successfully set as the Telegram webhook endpoint!',
+            message: 'johnl33t has been removed from the list of members!',
           },
         },
       },
-      description: 'The response when the Telegram webhook is set successfully.',
+      description: 'The response when the member has been successfully removed.',
     },
     401: {
       content: {
-        'text/plain': {
-          schema: z.literal('Unauthorized'),
-        },
+        'text/plain': { schema: z.literal('Unauthorized') },
       },
       description: 'The response when the request is unauthorized.',
     },
@@ -43,7 +41,7 @@ const route = createRoute({
       content: {
         'application/json': { schema: ResponseErrorSchema },
       },
-      description: 'The response when the Telegram webhook has failed to be set.',
+      description: 'The response when the member cannot be removed.',
     },
   },
 })
@@ -54,5 +52,5 @@ export const remove_member = new OpenAPIHono<HonoContext>().openapi(route, async
 
   return member
     ? context.json({ message: `${username} has been removed from the list of members!` })
-    : context.json({ error: `${username} is not found!` })
+    : context.json({ error: `${username} is not found!` }, 500)
 })

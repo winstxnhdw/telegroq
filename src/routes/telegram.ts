@@ -15,7 +15,6 @@ export const telegram = new Hono<HonoContext>().post('/telegram', async (context
   const bot = new Bot<GrammyContext>(config.BOT_TOKEN, { botInfo: bot_info })
 
   bot.api.config.use(autoRetry())
-  env(context.env)
   bot.use(autoChatAction(), hydrateReply, ignore_old(), env(context.env), chat)
 
   bot.use(

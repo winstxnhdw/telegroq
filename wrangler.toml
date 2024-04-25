@@ -4,5 +4,9 @@ compatibility_flags = ["nodejs_compat", "nodejs_als"]
 compatibility_date = "2023-03-25"
 minify = true
 
+kv_namespaces = [
+    { binding = "telegroq", id = "8e957c86318e4105b97471db2600ce74" },
+]
+
 [placement]
 mode = "smart"

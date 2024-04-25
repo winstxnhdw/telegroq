@@ -24,17 +24,15 @@ const route = createRoute({
         'application/json': {
           schema: ResponseSchema,
           example: {
-            message: 'https://example.com/telegram has been successfully set as the Telegram webhook endpoint!',
+            message: 'Successfully added johnl33t to the list of members!',
           },
         },
       },
-      description: 'The response when the Telegram webhook is set successfully.',
+      description: 'The response when a user has been successfully added.',
     },
     401: {
       content: {
-        'text/plain': {
-          schema: z.literal('Unauthorized'),
-        },
+        'text/plain': { schema: z.literal('Unauthorized') },
       },
       description: 'The response when the request is unauthorized.',
     },
@@ -42,7 +40,7 @@ const route = createRoute({
       content: {
         'application/json': { schema: ResponseErrorSchema },
       },
-      description: 'The response when the Telegram webhook has failed to be set.',
+      description: 'The response when a user cannot be added.',
     },
   },
 })
