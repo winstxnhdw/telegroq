@@ -11,11 +11,6 @@ const ResponseErrorSchema = z.object({
 const route = createRoute({
   method: 'get',
   path: '/add_member',
-  security: [
-    {
-      Bearer: [],
-    },
-  ],
   responses: {
     200: {
       content: {
@@ -46,12 +41,6 @@ const route = createRoute({
 })
 
 const add_member = new OpenAPIHono()
-
-add_member.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
-  type: 'http',
-  scheme: 'bearer',
-  bearerFormat: 'JWT',
-})
 
 add_member.openapi(route, async (context) => {
   return context.json({ message: 'hello' })
