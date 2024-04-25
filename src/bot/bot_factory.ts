@@ -1,4 +1,5 @@
-import { bot_info, chat } from '@/bot'
+import { bot_info } from '@/bot'
+import { chat, clear_command } from '@/bot/composers'
 import { env, ignore_old } from '@/bot/middlewares'
 import type { GrammyContext, SessionData } from '@/bot/types'
 import { get_config } from '@/config'
@@ -14,7 +15,7 @@ export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
   const bot = new Bot<GrammyContext>(config.BOT_TOKEN, { botInfo: bot_info })
 
   bot.api.config.use(autoRetry())
-  bot.use(autoChatAction(), hydrateReply, ignore_old(), env(environment), chat)
+  bot.use(autoChatAction(), hydrateReply, ignore_old(), env(environment), chat, clear_command)
 
   bot.use(
     lazySession({
