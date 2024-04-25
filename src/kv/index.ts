@@ -1,1 +1,1 @@
-export { is_member } from '@/kv/is_member'
+export { is_not_member } from '@/kv/is_not_member'
