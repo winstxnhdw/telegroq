@@ -14,6 +14,11 @@ const ResponseErrorSchema = z.object({
 const route = createRoute({
   method: 'get',
   path: '/delete_webhook',
+  security: [
+    {
+      Bearer: [],
+    },
+  ],
   responses: {
     200: {
       content: {
@@ -22,6 +27,14 @@ const route = createRoute({
         },
       },
       description: 'The response when the Telegram webhook is deleted successfully.',
+    },
+    401: {
+      content: {
+        'text/plain': {
+          schema: z.literal('Unauthorized'),
+        },
+      },
+      description: 'The response when the request is unauthorized.',
     },
     500: {
       content: {
@@ -40,7 +53,15 @@ const send_delete_webhook_request = async (bot_token: string): Promise<true | un
   }
 }
 
-export const delete_webhook = new OpenAPIHono().openapi(route, async (context) => {
+const delete_webhook = new OpenAPIHono()
+
+delete_webhook.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
+  type: 'http',
+  scheme: 'bearer',
+  bearerFormat: 'JWT',
+})
+
+delete_webhook.openapi(route, async (context) => {
   const config = get_config(context.env)
   const request = await send_delete_webhook_request(config.BOT_TOKEN)
 
@@ -48,3 +69,5 @@ export const delete_webhook = new OpenAPIHono().openapi(route, async (context) =
     ? context.json({ message: 'The Telegram webhook endpoint has been deleted!' } as const)
     : context.json({ error: 'Failed to delete the webhook!' } as const, 500)
 })
+
+export { delete_webhook }
