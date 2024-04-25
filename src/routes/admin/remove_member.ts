@@ -1,4 +1,3 @@
-import { is_member } from '@/kv'
 import type { HonoContext } from '@/types'
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 
@@ -8,10 +7,6 @@ const QuerySchema = z.object({
 
 const ResponseSchema = z.object({
   message: z.string(),
-})
-
-const ResponseErrorSchema = z.object({
-  error: z.string(),
 })
 
 const route = createRoute({
@@ -37,20 +32,18 @@ const route = createRoute({
       },
       description: 'The response when the request is unauthorized.',
     },
-    500: {
-      content: {
-        'application/json': { schema: ResponseErrorSchema },
-      },
-      description: 'The response when the member cannot be removed.',
-    },
   },
 })
 
 export const remove_member = new OpenAPIHono<HonoContext>().openapi(route, async (context) => {
   const username = context.req.query('user') ?? ''
-  const member = await is_member(context.env.telegroq, username)
+  const members = await context.env.telegroq.get('members', 'text')
+  const new_members = members
+    ?.split('\n')
+    .filter((member) => member !== username)
+    .join('\n')
 
-  return member
-    ? context.json({ message: `${username} has been removed from the list of members!` })
-    : context.json({ error: `${username} is not found!` }, 500)
+  await context.env.telegroq.put('members', new_members ?? '')
+
+  return context.json({ message: `${username} has been removed from the list of members!` })
 })
