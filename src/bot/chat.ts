@@ -1,10 +1,14 @@
 import type { CustomContext } from '@/bot/types'
-import { Router } from '@grammyjs/router'
+import { Composer } from 'grammy'
 import Groq from 'groq-sdk'
+import { parseInline } from 'marked'
 
-const router = new Router<CustomContext>((context) => context.session.user)
+const chat = new Composer<CustomContext>()
 
-router.route('chat').on('message:text', async (context) => {
+chat.on('message:text', async (context) => {
+  if (!context.config.MEMBERS_LIST.split(' ').includes(context.from.username ?? ''))
+    return context.reply('You are not authorized to use this bot!')
+
   context.chatAction = 'typing'
 
   const groq = new Groq({ apiKey: context.config.GROQ_API_KEY })
@@ -13,7 +17,9 @@ router.route('chat').on('message:text', async (context) => {
     model: 'llama3-70b-8192',
   })
 
-  return context.reply(chat_completion.choices[0]?.message.content ?? 'There was an error with the chat bot!')
+  return context.replyWithHTML(
+    await parseInline(chat_completion.choices[0]?.message.content ?? 'There was an error with the chat bot!'),
+  )
 })
 
-export { router }
+export { chat }
