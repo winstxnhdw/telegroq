@@ -1,4 +1,4 @@
-import { get_config } from '@/config.js'
+import { get_config } from '@/config'
 import type { MiddlewareHandler } from 'hono'
 import { bearerAuth } from 'hono/bearer-auth'
 

@@ -3,7 +3,7 @@ import { telegram } from '@/routes/telegram'
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { prettyJSON } from 'hono/pretty-json'
-import { bearer_auth } from './middlewares/bearer_auth.js'
+import { bearer_auth } from '@/middlewares'
 
 function main() {
   const openapi_documentation_route = '/openapi.json'
@@ -17,10 +17,10 @@ function main() {
 
   return app
     .use(prettyJSON())
-    .use('/webhook/*', bearer_auth)
+    .use('/admin/*', bearer_auth)
     .get('/docs', swaggerUI({ url: openapi_documentation_route }))
-    .route('/webhook', set_webhook)
-    .route('/webhook', delete_webhook)
+    .route('/admin', set_webhook)
+    .route('/admin', delete_webhook)
     .route('/', telegram)
 }
 

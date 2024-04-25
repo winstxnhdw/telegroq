@@ -61,7 +61,7 @@ const set_webhook = new OpenAPIHono()
 set_webhook.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
   type: 'http',
   scheme: 'bearer',
-  in: 'header',
+  bearerFormat: 'JWT',
 })
 
 set_webhook.openapi(route, async (context) => {
