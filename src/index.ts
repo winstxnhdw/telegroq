@@ -1,9 +1,9 @@
+import { bearer_auth } from '@/middlewares'
 import { delete_webhook, set_webhook } from '@/routes'
 import { telegram } from '@/routes/telegram'
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { prettyJSON } from 'hono/pretty-json'
-import { bearer_auth } from '@/middlewares'
 
 function main() {
   const openapi_documentation_route = '/openapi.json'
