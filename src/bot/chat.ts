@@ -41,7 +41,11 @@ chat.on('message:text', async (context) => {
       .map(({ content }) => content)
       .join('\n')
 
-    const summary: string = await context.env.ai.run('@cf/facebook/bart-large-cnn', context_to_summarise)
+    const summary: string = await context.env.ai.run('@cf/facebook/bart-large-cnn', {
+      input_text: context_to_summarise,
+      max_length: 4096,
+    })
+
     new_messages = [{ role: 'system', content: summary }, ...new_messages.slice(-2)]
   }
 
