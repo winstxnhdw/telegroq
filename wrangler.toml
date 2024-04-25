@@ -10,3 +10,6 @@ kv_namespaces = [
 
 [placement]
 mode = "smart"
+
+[ai]
+binding = "ai"
