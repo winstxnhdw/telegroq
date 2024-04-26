@@ -23,24 +23,26 @@ const summarise_context = async (context: GrammyContext, messages: Message[]): P
 chat.on('message:text', async (context) => {
   context.chatAction = 'typing'
 
+  const system = await context.env.telegroq.get(`system:${context.username}`, 'text')
+  const system_prompt = { role: 'system', content: system ?? '' } as Message
+  const question_prompt = { role: 'user', content: context.message.text } as Message
   const history = await context.env.telegroq.get<Message[]>(context.username, 'json')
-  const question = { role: 'user', content: context.message.text } as Message
-  const messages = history ? [...history, question] : [question]
-  const completion = await context.groq.chat.completions.create({
+  const messages = history ? [system_prompt, ...history, question_prompt] : [system_prompt, question_prompt]
+  const chat_completion = await context.groq.chat.completions.create({
     messages: messages,
     model: 'llama3-70b-8192',
   })
 
-  const response = completion.choices[0]?.message.content
+  const response = chat_completion.choices[0]?.message.content
 
   if (!response) {
     return context.reply('There was an error with the chat bot!')
   }
 
   messages.push({ role: 'assistant', content: response })
-  const total_tokens = completion.usage?.total_tokens
-  const message_to_store = total_tokens && total_tokens > 8192 ? await summarise_context(context, messages) : messages
-  await context.env.telegroq.put(context.username, JSON.stringify(message_to_store))
+  // const total_tokens = chat_completion.usage?.total_tokens
+  // const message_to_store = total_tokens && total_tokens > 8192 ? await summarise_context(context, messages) : messages
+  await context.env.telegroq.put(context.username, JSON.stringify(messages))
 
   return context.replyWithHTML(await parseInline(response))
 })
