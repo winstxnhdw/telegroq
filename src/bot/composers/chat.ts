@@ -1,5 +1,4 @@
 import type { GrammyContext } from '@/bot/types'
-import { is_not_member } from '@/kv'
 import { Composer } from 'grammy'
 import { parseInline } from 'marked'
 
@@ -22,12 +21,9 @@ const summarise_context = async (context: GrammyContext, messages: Message[]): P
 }
 
 chat.on('message:text', async (context) => {
-  if (!context.from.username) return
-  if (await is_not_member(context.env.telegroq, context.from.username)) return
-
   context.chatAction = 'typing'
 
-  const history = await context.env.telegroq.get<Message[]>(context.from.username, 'json')
+  const history = await context.env.telegroq.get<Message[]>(context.username, 'json')
   const question = { role: 'user', content: context.message.text } as Message
   const messages = history ? [...history, question] : [question]
   const chat_completion = await context.groq.chat.completions.create({
@@ -43,8 +39,8 @@ chat.on('message:text', async (context) => {
 
   messages.push({ role: 'assistant', content: response })
   const total_tokens = chat_completion.usage?.total_tokens
-  const message_to_store = total_tokens && total_tokens > 8192 ? summarise_context(context, messages) : messages
-  await context.env.telegroq.put(context.from.username, JSON.stringify(message_to_store))
+  const message_to_store = total_tokens && total_tokens > 8192 ? await summarise_context(context, messages) : messages
+  await context.env.telegroq.put(context.username, JSON.stringify(message_to_store))
 
   return context.replyWithHTML(await parseInline(response))
 })

@@ -13,6 +13,10 @@ type GroqBinding = {
   groq: Groq
 }
 
+type Members = {
+  username: string
+}
+
 export type GrammyContext = ParseModeFlavor<
-  Context & SessionFlavor<SessionData> & AutoChatActionFlavor & Env & GroqBinding
+  Context & SessionFlavor<SessionData> & AutoChatActionFlavor & Env & GroqBinding & Members
 >
