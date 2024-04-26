@@ -11,7 +11,10 @@ import { Bot } from 'grammy'
 
 export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
   const config = get_config(environment)
-  const bot = new Bot<GrammyContext>(config.BOT_TOKEN, { botInfo: bot_info })
+  const bot = new Bot<GrammyContext>(config.BOT_TOKEN, {
+    client: { canUseWebhookReply: (method) => method === 'sendChatAction' },
+    botInfo: bot_info,
+  })
 
   bot.api.config.use(autoRetry())
   bot.use(
