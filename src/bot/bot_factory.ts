@@ -15,7 +15,7 @@ export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
   const bot = new Bot<GrammyContext>(config.BOT_TOKEN, { botInfo: bot_info })
 
   bot.api.config.use(autoRetry())
-  bot.use(autoChatAction(), hydrateReply, ignore_old(), env(environment), chat, clear_command)
+  bot.use(autoChatAction(), hydrateReply, ignore_old(), env(environment), clear_command, chat)
 
   bot.use(
     lazySession({
