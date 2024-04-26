@@ -14,9 +14,5 @@ type GroqBinding = {
 }
 
 export type GrammyContext = ParseModeFlavor<
-  Context &
-    SessionFlavor<SessionData> &
-    AutoChatActionFlavor &
-    Env &
-    GroqBinding
+  Context & SessionFlavor<SessionData> & AutoChatActionFlavor & Env & GroqBinding
 >
