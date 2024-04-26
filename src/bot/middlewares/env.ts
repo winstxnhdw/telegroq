@@ -2,8 +2,8 @@ import type { Bindings } from '@/types'
 import type { Context, NextFunction } from 'grammy'
 
 export const env =
-  (env: Bindings) =>
+  (environment: Bindings) =>
   <T extends Context & { env: Bindings }>(context: T, next: NextFunction) => {
-    context.env = env
+    context.env = environment
     return next()
   }
