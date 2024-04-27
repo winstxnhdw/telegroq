@@ -23,10 +23,10 @@ const summarise_context = async (context: GrammyContext, messages: Message[]): P
 chat.on('message:text', async (context) => {
   context.chatAction = 'typing'
 
-  const system = await context.env.telegroq.get(`system:${context.username}`, 'text')
+  const system = await context.env.telegroq.get(`system:${context.member.username}`, 'text')
   const system_prompt = { role: 'system', content: system ?? '' } as Message
   const question_prompt = { role: 'user', content: context.message.text } as Message
-  const history = await context.env.telegroq.get<Message[]>(context.username, 'json')
+  const history = await context.env.telegroq.get<Message[]>(`history:${context.member.username}`, 'json')
   const messages = history ? [system_prompt, ...history, question_prompt] : [system_prompt, question_prompt]
   const chat_completion = await context.groq.chat.completions.create({
     messages: messages,
@@ -42,7 +42,7 @@ chat.on('message:text', async (context) => {
   messages.push({ role: 'assistant', content: response })
   // const total_tokens = chat_completion.usage?.total_tokens
   // const message_to_store = total_tokens && total_tokens > 8192 ? await summarise_context(context, messages) : messages
-  await context.env.telegroq.put(context.username, JSON.stringify(messages))
+  await context.env.telegroq.put(context.member.username, JSON.stringify(messages))
 
   return context.replyWithHTML(await parseInline(response))
 })

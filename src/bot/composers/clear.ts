@@ -1,13 +1,13 @@
 import type { GrammyContext } from '@/bot/types'
 import { Composer } from 'grammy'
 
-const clear_command = new Composer<GrammyContext>()
+const clear = new Composer<GrammyContext>()
 
-clear_command.command('clear', async (context) => {
+clear.command('clear', async (context) => {
   context.chatAction = 'typing'
-  await context.env.telegroq.delete(context.username)
+  await context.env.telegroq.delete(context.member.username)
 
   return context.reply('All context has been cleared!')
 })
 
-export { clear_command }
+export { clear }
