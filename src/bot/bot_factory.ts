@@ -1,5 +1,5 @@
 import { bot_info } from '@/bot'
-import { ask_human, chat, clear } from '@/bot/composers'
+import { ask_human, chat, clear, start } from '@/bot/composers'
 import { ask_human_conversation, reply_human_conversation } from '@/bot/conversations'
 import { env, groq, ignore_old, members } from '@/bot/middlewares'
 import type { GrammyContext } from '@/bot/types'
@@ -39,6 +39,7 @@ export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
     createConversation(reply_human_conversation, 'reply_human'),
     ask_human,
     clear,
+    start,
     chat,
   )
 
