@@ -21,7 +21,7 @@ export const ask_human_conversation =
       return
     }
 
-    const member_list = members?.split('\n')
+    const member_list = members?.split('\n').filter((member) => member !== context.member.username)
     const random_number = await conversation.random()
     const member = member_list[Math.floor(random_number * member_list.length)]
     const user_id = await conversation.external(() => context.env.telegroq.get(`id:${member}`, 'text'))
@@ -39,7 +39,7 @@ export const ask_human_conversation =
     await conversation.external(() => context.env.telegroq.put(`human_expert:${user_id}`, JSON.stringify(reply_link)))
     await context.api.sendMessage(user_id, 'Someone has sent you a question.')
     await question_context.copyMessage(user_id, {
-      reply_markup: new InlineKeyboard().text('Answer', 'reply-human').row().text('Decline', 'do-not-reply-human'),
+      reply_markup: new InlineKeyboard().text('Answer', 'reply-human').text('Decline', 'do-not-reply-human').row(),
     })
 
     await context.reply('Your question has been sent to a human expert.')
