@@ -1,5 +1,5 @@
 import { env } from '@/bot/middlewares'
-import type { Convo, GrammyContext } from '@/bot/types'
+import type { Convo, GrammyContext, Reply } from '@/bot/types'
 import type { Bindings } from '@/types'
 import { InlineKeyboard } from 'grammy'
 
@@ -9,6 +9,11 @@ export const ask_human_conversation =
     await context.reply('What is your question?')
     const question_context = await conversation.wait()
     const members = await conversation.external(() => context.env.telegroq.get('members', 'text'))
+
+    if (!question_context.msgId) {
+      await context.reply('Unable to find the question. Please try again later.')
+      return
+    }
 
     if (!members) {
       await context.reply('No human experts available at the moment. Please try again later.')
@@ -25,7 +30,12 @@ export const ask_human_conversation =
       return
     }
 
-    await conversation.external(() => context.env.telegroq.put(`human_expert:${user_id}`, context.member.id.toString()))
+    const reply_link: Reply = {
+      user_id: context.member.id,
+      message_id: question_context.msgId,
+    }
+
+    await conversation.external(() => context.env.telegroq.put(`human_expert:${user_id}`, JSON.stringify(reply_link)))
     await question_context.copyMessage(user_id, {
       reply_markup: new InlineKeyboard().text('Answer?', 'reply-human'),
     })
