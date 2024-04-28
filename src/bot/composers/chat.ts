@@ -42,7 +42,7 @@ chat.on('message:text', async (context) => {
   messages.push({ role: 'assistant', content: response })
   // const total_tokens = chat_completion.usage?.total_tokens
   // const message_to_store = total_tokens && total_tokens > 8192 ? await summarise_context(context, messages) : messages
-  await context.env.telegroq.put(context.member.username, JSON.stringify(messages))
+  await context.env.telegroq.put(`history:${context.member.username}`, JSON.stringify(messages))
 
   return context.replyWithHTML(await parseInline(response))
 })
