@@ -4,7 +4,8 @@ import type { Bindings } from '@/types'
 import { InlineKeyboard } from 'grammy'
 
 export const ask_human_conversation =
-  (environment: Bindings) => async (conversation: Convo, context: GrammyContext) => {
+  (environment: Bindings) =>
+  async (conversation: Convo, context: GrammyContext): Promise<void> => {
     await conversation.run(env(environment))
     await context.reply('What is your question?')
     const question_context = await conversation.wait()
@@ -36,8 +37,9 @@ export const ask_human_conversation =
     }
 
     await conversation.external(() => context.env.telegroq.put(`human_expert:${user_id}`, JSON.stringify(reply_link)))
+    await context.api.sendMessage(user_id, 'Someone has sent you a question.')
     await question_context.copyMessage(user_id, {
-      reply_markup: new InlineKeyboard().text('Answer?', 'reply-human'),
+      reply_markup: new InlineKeyboard().text('Answer', 'reply-human').row().text('Decline', 'do-not-reply-human'),
     })
 
     await context.reply('Your question has been sent to a human expert.')

@@ -3,7 +3,8 @@ import type { Convo, GrammyContext, Reply } from '@/bot/types'
 import type { Bindings } from '@/types'
 
 export const reply_human_conversation =
-  (environment: Bindings) => async (conversation: Convo, context: GrammyContext) => {
+  (environment: Bindings) =>
+  async (conversation: Convo, context: GrammyContext): Promise<void> => {
     await conversation.run(env(environment))
     await context.reply('What is your answer?')
     const reply_context = await conversation.wait()
