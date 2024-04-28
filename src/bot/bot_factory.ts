@@ -29,12 +29,12 @@ export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
   bot.api.config.use(autoRetry())
   bot.use(
     hydrateReply,
-    conversations(),
     autoChatAction(),
     ignore_old(),
     env(environment),
     groq(environment),
     members(environment),
+    conversations(),
     createConversation(ask_human_conversation, 'ask_human'),
     createConversation(reply_human_conversation, 'reply_human'),
     ask_human,

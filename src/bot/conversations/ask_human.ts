@@ -25,4 +25,6 @@ export const ask_human_conversation = async (conversation: Convo, context: Gramm
   await question_context.copyMessage(user_id, {
     reply_markup: new InlineKeyboard().text('Answer?', 'reply-human'),
   })
+
+  await context.reply('Your question has been sent to a human expert.')
 }
