@@ -1,7 +1,7 @@
 import { bot_info } from '@/bot'
 import { ask_human, chat, clear, start } from '@/bot/composers'
 import { ask_human_conversation, reply_human_conversation } from '@/bot/conversations'
-import { env, groq, ignore_old, members } from '@/bot/middlewares'
+import { env, groq, ignore_old, kv, members } from '@/bot/middlewares'
 import type { GrammyContext } from '@/bot/types'
 import { get_config } from '@/config'
 import type { Bindings } from '@/types'
@@ -32,11 +32,12 @@ export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
     autoChatAction(),
     ignore_old(),
     conversations(),
+    kv(environment.telegroq),
     env(environment),
     groq(environment),
     members(environment),
-    createConversation(ask_human_conversation(environment), 'ask_human'),
-    createConversation(reply_human_conversation(environment), 'reply_human'),
+    createConversation(ask_human_conversation(environment.telegroq), 'ask_human'),
+    createConversation(reply_human_conversation(environment.telegroq), 'reply_human'),
     ask_human,
     clear,
     start,

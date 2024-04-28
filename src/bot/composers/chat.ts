@@ -1,13 +1,8 @@
-import type { GrammyContext } from '@/bot/types'
+import type { GrammyContext, Message } from '@/bot/types'
 import { Composer } from 'grammy'
 import { parseInline } from 'marked'
 
 const chat = new Composer<GrammyContext>()
-
-type Message = {
-  role: 'system' | 'user' | 'assistant'
-  content: string
-}
 
 const summarise_context = async (context: GrammyContext, messages: Message[]): Promise<Message[]> => {
   const context_to_summarise = messages.map(({ content }) => content).join('\n')
@@ -23,10 +18,10 @@ const summarise_context = async (context: GrammyContext, messages: Message[]): P
 chat.on('message:text', async (context) => {
   context.chatAction = 'typing'
 
-  const system = await context.env.telegroq.get(`system:${context.member.username}`, 'text')
-  const system_prompt = { role: 'system', content: system ?? '' } as Message
+  const system = await context.kv.get_system_prompt(context.member.username)
+  const system_prompt = { role: 'system', content: system } as Message
   const question_prompt = { role: 'user', content: context.message.text } as Message
-  const history = await context.env.telegroq.get<Message[]>(`history:${context.member.username}`, 'json')
+  const history = await context.kv.get_history(context.member.username)
   const messages = history ? [system_prompt, ...history, question_prompt] : [system_prompt, question_prompt]
   const chat_completion = await context.groq.chat.completions.create({
     messages: messages,
@@ -42,7 +37,7 @@ chat.on('message:text', async (context) => {
   messages.push({ role: 'assistant', content: response })
   // const total_tokens = chat_completion.usage?.total_tokens
   // const message_to_store = total_tokens && total_tokens > 8192 ? await summarise_context(context, messages) : messages
-  await context.env.telegroq.put(`history:${context.member.username}`, JSON.stringify(messages))
+  await context.kv.put_history(context.member.username, messages)
 
   return context.replyWithHTML(await parseInline(response))
 })
