@@ -3,8 +3,6 @@ import { Composer } from 'grammy'
 
 const start = new Composer<GrammyContext>()
 
-start.command('start', async (context) =>
-  context.env.telegroq.put(`id:${context.member.username}`, context.member.id.toString()),
-)
+start.command('start', (context) => context.kv.put_user_id(context.member.username, context.member.id))
 
 export { start }
