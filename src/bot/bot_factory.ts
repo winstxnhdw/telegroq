@@ -1,6 +1,6 @@
 import { bot_info } from '@/bot'
-import { chat, clear, human_expert } from '@/bot/composers'
-import { ask_human, reply_human } from '@/bot/conversations'
+import { ask_human, chat, clear } from '@/bot/composers'
+import { ask_human_conversation, reply_human_conversation } from '@/bot/conversations'
 import { env, groq, ignore_old, members } from '@/bot/middlewares'
 import type { GrammyContext } from '@/bot/types'
 import { get_config } from '@/config'
@@ -35,11 +35,11 @@ export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
     env(environment),
     groq(environment),
     members(environment),
-    createConversation(ask_human, 'ask_human'),
-    createConversation(reply_human, 'reply_human'),
+    createConversation(ask_human_conversation, 'ask_human'),
+    createConversation(reply_human_conversation, 'reply_human'),
+    ask_human,
     clear,
     chat,
-    human_expert,
   )
 
   bot.catch(console.error)

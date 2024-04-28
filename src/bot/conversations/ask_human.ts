@@ -1,7 +1,7 @@
 import type { Convo, GrammyContext } from '@/bot/types'
 import { InlineKeyboard } from 'grammy'
 
-export const ask_human = async (conversation: Convo, context: GrammyContext) => {
+export const ask_human_conversation = async (conversation: Convo, context: GrammyContext) => {
   await context.reply('What is your question?')
   const question_context = await conversation.wait()
   const members = await context.env.telegroq.get('members', 'text')
@@ -23,6 +23,6 @@ export const ask_human = async (conversation: Convo, context: GrammyContext) => 
 
   await context.env.telegroq.put(`human_expert:${user_id}`, context.member.id.toString())
   await question_context.copyMessage(user_id, {
-    reply_markup: new InlineKeyboard().text('Answer?', 'reply_human'),
+    reply_markup: new InlineKeyboard().text('Answer?', 'reply-human'),
   })
 }
