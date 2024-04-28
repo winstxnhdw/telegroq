@@ -29,7 +29,7 @@ export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
   bot.api.config.use(autoRetry())
   bot.use(
     hydrateReply,
-    autoChatAction(),
+    autoChatAction(bot.api),
     ignore_old(),
     conversations(),
     kv(environment.telegroq),
