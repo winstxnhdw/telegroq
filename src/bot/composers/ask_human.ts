@@ -7,6 +7,8 @@ ask_human.command('ask_human', (context) => context.conversation.enter('ask_huma
 
 ask_human.callbackQuery('reply-human', async (context) => {
   await context.conversation.enter('reply_human')
+  await context.editMessageReplyMarkup()
+
   return context.answerCallbackQuery()
 })
 
@@ -21,6 +23,8 @@ ask_human.callbackQuery('do-not-reply-human', async (context) => {
 
   await context.env.telegroq.delete(`human_expert:${context.member.id}`)
   await context.reply('You have chosen not to reply to the question.')
+  await context.editMessageReplyMarkup()
+
   return context.answerCallbackQuery()
 })
 
