@@ -1,6 +1,6 @@
 import { bot_info } from '@/bot'
-import { ask_human, chat, clear, start } from '@/bot/composers'
-import { ask_human_conversation, reply_human_conversation } from '@/bot/conversations'
+import { ask_human, ask_lty, chat, clear, start } from '@/bot/composers'
+import { ask_human_conversation, ask_lty_conversation, reply_human_conversation } from '@/bot/conversations'
 import { env, groq, kv, members } from '@/bot/middlewares'
 import type { GrammyContext } from '@/bot/types'
 import { get_config } from '@/config'
@@ -37,7 +37,9 @@ export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
     members(environment),
     createConversation(ask_human_conversation(environment.telegroq), 'ask_human'),
     createConversation(reply_human_conversation(environment.telegroq), 'reply_human'),
+    createConversation(ask_lty_conversation(environment.telegroq), 'ask_lty'),
     ask_human,
+    ask_lty,
     clear,
     start,
     chat,
