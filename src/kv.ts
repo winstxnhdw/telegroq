@@ -37,15 +37,29 @@ export class KV {
     return system_prompt ?? ''
   }
 
-  async get_reply_link(id: number | string): Promise<Reply | null> {
-    return this.kv.get(`ask_human:${id}`, 'json')
+  async get_reply_links(id: number | string): Promise<Reply[]> {
+    const reply_links = await this.kv.get<Reply[]>(`ask_human:${id}`, 'json')
+    return reply_links ?? []
+  }
+
+  async get_reply_link(id: number | string, sent_question_id: number): Promise<Reply | undefined> {
+    const replies = await this.get_reply_links(id)
+    return replies.find((reply) => reply.sent_question_id === sent_question_id)
+  }
+
+  async put_reply_links(id: number | string, reply_links: Reply[]): Promise<void> {
+    await this.kv.put(`ask_human:${id}`, JSON.stringify(reply_links))
   }
 
   async put_reply_link(id: number | string, reply_link: Reply): Promise<void> {
-    await this.kv.put(`ask_human:${id}`, JSON.stringify(reply_link))
+    const replies = await this.get_reply_links(id)
+    replies.push(reply_link)
+    await this.put_reply_links(id, replies)
   }
 
-  async delete_reply_link(id: number | string): Promise<void> {
-    await this.kv.delete(`ask_human:${id}`)
+  async delete_reply_link(id: number | string, sent_question_id: number): Promise<void> {
+    const replies = await this.get_reply_links(id)
+    const new_replies = replies.filter((reply) => reply.sent_question_id !== sent_question_id)
+    await this.put_reply_links(id, new_replies)
   }
 }

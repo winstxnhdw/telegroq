@@ -8,25 +8,32 @@ ask_human.command('ask_human', async (context) => {
   return context.conversation.enter('ask_human')
 })
 
-ask_human.callbackQuery('reply-human', async (context) => {
+ask_human.callbackQuery('reply-human', async (context): Promise<true> => {
   context.chatAction = 'typing'
+
   await context.conversation.enter('reply_human')
   await context.editMessageReplyMarkup()
 
   return context.answerCallbackQuery()
 })
 
-ask_human.callbackQuery('do-not-reply-human', async (context) => {
+ask_human.callbackQuery('do-not-reply-human', async (context): Promise<true> => {
   context.chatAction = 'typing'
-  const reply = await context.kv.get_reply_link(context.member.id)
+
+  if (!context.msgId) {
+    await context.reply('No message ID found!')
+    return context.answerCallbackQuery()
+  }
+
+  const reply = await context.kv.get_reply_link(context.member.id, context.msgId)
 
   if (reply) {
-    await context.api.sendMessage(reply.user_id, 'The human expert has refused to answer your question.', {
-      reply_to_message_id: reply.message_id,
+    await context.api.sendMessage(reply.inquirer_user_id, 'The human expert has refused to answer your question.', {
+      reply_to_message_id: reply.original_question_id,
     })
   }
 
-  await context.kv.delete_reply_link(context.member.id)
+  await context.kv.delete_reply_link(context.member.id, context.msgId)
   await context.reply('You have chosen not to reply to the question.')
   await context.editMessageReplyMarkup()
 

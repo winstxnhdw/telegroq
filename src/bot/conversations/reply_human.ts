@@ -4,17 +4,23 @@ import type { Convo, GrammyContext } from '@/bot/types'
 export const reply_human_conversation =
   (kv_binding: KVNamespace) =>
   async (conversation: Convo, context: GrammyContext): Promise<void> => {
-    await conversation.run(kv(kv_binding))
-    await context.reply('What is your answer?')
-    const reply_context = await conversation.wait()
-    const reply = await conversation.external(() => context.kv.get_reply_link(context.member.id))
-
-    if (!reply) {
-      await context.reply('Unable to find the user who asked the question. Please try again later.')
+    if (!context.msgId) {
+      await context.reply('No message ID found!')
       return
     }
 
-    await conversation.external(() => context.kv.delete_reply_link(context.member.id))
-    await reply_context.copyMessage(reply.user_id, { reply_to_message_id: reply.message_id })
+    await conversation.run(kv(kv_binding))
+    await context.reply('What is your answer?')
+    const reply_context = await conversation.wait()
+    const sent_message_id = context.msgId
+    const reply = await conversation.external(() => context.kv.get_reply_link(context.member.id, sent_message_id))
+
+    if (!reply) {
+      await context.reply('Unable to find the user who asked the question.')
+      return
+    }
+
+    await conversation.external(() => context.kv.delete_reply_link(context.member.id, reply.sent_question_id))
+    await reply_context.copyMessage(reply.inquirer_user_id, { reply_to_message_id: reply.original_question_id })
     await context.reply('Your answer has been sent.')
   }

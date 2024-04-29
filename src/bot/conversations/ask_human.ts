@@ -8,13 +8,13 @@ export const ask_human_conversation =
     await conversation.run(kv(kv_binding))
     await context.reply('What is your question?')
     const question_context = await conversation.wait()
-    const members = await conversation.external(() => context.kv.get_members())
 
     if (!question_context.msgId) {
       await context.reply('Unable to find the question. Please try again later.')
       return
     }
 
+    const members = await conversation.external(() => context.kv.get_members())
     const member_list = members.filter((member) => member !== context.member.username)
     const random_number = await conversation.random()
     const random_member_username = member_list[Math.floor(random_number * member_list.length)]
@@ -31,16 +31,18 @@ export const ask_human_conversation =
       return
     }
 
-    const reply_link: Reply = {
-      user_id: context.member.id,
-      message_id: question_context.msgId,
-    }
-
-    await conversation.external(() => context.kv.put_reply_link(user_id, reply_link))
-    await context.api.sendMessage(user_id, 'Someone has sent you a question.')
-    await question_context.copyMessage(user_id, {
+    await context.api.sendMessage(user_id, 'Someone has sent you a question!')
+    const { message_id } = await question_context.copyMessage(user_id, {
       reply_markup: new InlineKeyboard().text('Answer', 'reply-human').text('Decline', 'do-not-reply-human').row(),
     })
 
-    await context.reply('Your question has been sent to a human expert.')
+    const reply_link: Reply = {
+      inquirer_user_id: context.member.id,
+      original_question_id: question_context.msgId,
+      sent_question_id: message_id,
+      timestamp: await conversation.now(),
+    }
+
+    await conversation.external(() => context.kv.put_reply_link(user_id, reply_link))
+    await context.reply('Your question has been sent to a human expert 🧑‍🔬')
   }

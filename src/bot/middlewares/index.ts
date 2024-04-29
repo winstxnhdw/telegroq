@@ -1,5 +1,4 @@
 export { env } from '@/bot/middlewares/env'
 export { groq } from '@/bot/middlewares/groq'
-export { ignore_old } from '@/bot/middlewares/ignore_old'
 export { kv } from '@/bot/middlewares/kv'
 export { members } from '@/bot/middlewares/members'

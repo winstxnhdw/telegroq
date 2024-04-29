@@ -1,4 +1,6 @@
 export type Reply = {
-  user_id: number
-  message_id: number
+  inquirer_user_id: number
+  original_question_id: number
+  sent_question_id: number
+  timestamp: number
 }
