@@ -11,7 +11,7 @@
     "@grammyjs/conversations": "^1.2.0",
     "@grammyjs/parse-mode": "^1.9.0",
     "@grammyjs/storage-cloudflare": "^2.4.2",
-    "@hono/swagger-ui": "^0.2.1",
+    "@hono/swagger-ui": "^0.2.2",
     "@hono/zod-openapi": "^0.11.0",
     "grammy": "^1.22.4",
     "groq-sdk": "^0.3.3",
@@ -21,11 +21,11 @@
     "zod": "^3.23.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.7.1",
+    "@biomejs/biome": "1.7.2",
     "@cloudflare/workers-types": "^4.20240423.0",
     "bun-types": "^1.1.6",
     "typescript": "^5.4.5",
-    "wrangler": "^3.52.0"
+    "wrangler": "^3.53.0"
   },
   "overrides": {
     "o-son": "npm:@ponomarevlad/o-son@1.0.1-web.1"
