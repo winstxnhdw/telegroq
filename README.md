@@ -4,7 +4,24 @@
 [![deploy.yml](https://github.com/winstxnhdw/telegroq/actions/workflows/deploy.yml/badge.svg)](https://github.com/winstxnhdw/telegroq/actions/workflows/deploy.yml)
 [![formatter.yml](https://github.com/winstxnhdw/telegroq/actions/workflows/formatter.yml/badge.svg)](https://github.com/winstxnhdw/telegroq/actions/workflows/formatter.yml)
 
-A chat bot on Telegram, powered by [Hono](https://hono.dev/), [Cloudflare Workers](https://workers.cloudflare.com/), [OpenAPI Swagger UI](https://swagger.io/specification/), [grammY](https://grammy.dev/), and [Groq](https://groq.com/).
+`telegroq` is a serverless invite-only AI-powered chat bot on Telegram, made purely for fun.
+
+## Features
+
+- Question answering with `llama3-70b`
+- Random and anonymous question answering with fellow invitees
+- Anonymous question answering with [LTYGUY](https://github.com/LTYGUY/)
+- Endpoint for adding and removing members/admins
+
+## Technologies
+
+- [Hono](https://hono.dev/)
+- [Cloudflare Workers](https://workers.cloudflare.com/)
+- [Cloudflare Workers KV](https://developers.cloudflare.com/kv/)
+- [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/)
+- [OpenAPI Swagger](https://swagger.io/specification/)
+- [grammY](https://grammy.dev/)
+- [Groq](https://groq.com/)
 
 ## Development
 
@@ -12,4 +29,10 @@ Install all dependencies.
 
 ```bash
 bun install
+```
+
+Run the development server.
+
+```bash
+bun dev
 ```
