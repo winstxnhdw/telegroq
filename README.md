@@ -11,7 +11,7 @@
 - Question answering with `llama3-70b`
 - Random and anonymous question answering with fellow invitees
 - Anonymous question answering with [LTYGUY](https://github.com/LTYGUY/)
-- Endpoint for adding and removing members/admins
+- Secured endpoints for adding and removing members/admins
 
 ## Technologies
 
@@ -29,6 +29,16 @@ Install all dependencies.
 
 ```bash
 bun install
+```
+
+Setup environment variables.
+
+```bash
+{
+  echo "BOT_TOKEN=$BOT_TOKEN"
+  echo "GROQ_API_KEY=$GROQ_TOKEN"
+  echo "AUTH_TOKEN=$AUTH_TOKEN"
+} >> .dev.vars
 ```
 
 Run the development server.
