@@ -29,12 +29,15 @@ ask_human.callbackQuery('do-not-reply-human', async (context): Promise<true> => 
 
   if (reply) {
     await context.api.sendMessage(reply.inquirer_user_id, 'The human expert has refused to answer your question.', {
-      reply_to_message_id: reply.original_question_id,
+      reply_parameters: { message_id: reply.original_question_id },
     })
   }
 
   await context.kv.delete_reply_link(context.member.id, context.msgId)
-  await context.reply('You have chosen not to reply to the question.')
+  await context.reply('You have chosen not to reply to the question.', {
+    reply_parameters: { message_id: Number(context.callbackQuery.id) },
+  })
+
   await context.editMessageReplyMarkup()
 
   return context.answerCallbackQuery()
