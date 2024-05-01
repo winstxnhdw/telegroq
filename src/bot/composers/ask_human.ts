@@ -8,17 +8,17 @@ ask_human.command('ask_human', async (context) => {
   return context.conversation.enter('ask_human')
 })
 
-ask_human.callbackQuery('reply-human', async (context): Promise<true> => {
+ask_human.callbackQuery('reply-human', async (context) => {
   context.chatAction = 'typing'
-
-  await context.conversation.enter('reply_human')
   await context.editMessageReplyMarkup()
+  await context.answerCallbackQuery()
 
-  return context.answerCallbackQuery()
+  return context.conversation.enter('reply_human')
 })
 
 ask_human.callbackQuery('do-not-reply-human', async (context): Promise<true> => {
   context.chatAction = 'typing'
+  await context.editMessageReplyMarkup()
 
   if (!context.msgId) {
     await context.reply('No message ID found!')
@@ -37,8 +37,6 @@ ask_human.callbackQuery('do-not-reply-human', async (context): Promise<true> => 
   await context.reply('You have chosen not to reply to the question.', {
     reply_parameters: { message_id: Number(context.callbackQuery.id) },
   })
-
-  await context.editMessageReplyMarkup()
 
   return context.answerCallbackQuery()
 })
