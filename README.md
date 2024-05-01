@@ -27,10 +27,6 @@
 
 Install all dependencies.
 
-```bash
-bun install
-```
-
 Setup environment variables.
 
 ```bash
@@ -39,6 +35,10 @@ Setup environment variables.
   echo "GROQ_API_KEY=$GROQ_TOKEN"
   echo "AUTH_TOKEN=$AUTH_TOKEN"
 } >> .dev.vars
+```
+
+```bash
+bun install
 ```
 
 Run the development server.

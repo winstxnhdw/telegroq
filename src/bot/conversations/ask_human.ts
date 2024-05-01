@@ -6,8 +6,19 @@ export const ask_human_conversation =
   (kv_binding: KVNamespace) =>
   async (conversation: Convo, context: GrammyContext): Promise<void> => {
     await conversation.run(kv(kv_binding))
-    await context.reply('What is your question?')
-    const question_context = await conversation.wait()
+
+    await context.reply('What is your question?', {
+      reply_markup: new InlineKeyboard().text('Cancel', 'cancel'),
+    })
+
+    const question_context = await conversation.waitFor(['message', 'callback_query:data'])
+    await question_context.editMessageReplyMarkup()
+
+    if (question_context.callbackQuery?.data === 'cancel') {
+      await question_context.deleteMessage()
+      await question_context.answerCallbackQuery()
+      return
+    }
 
     if (!question_context.msgId) {
       await context.reply('Unable to find the question. Please try again later.')

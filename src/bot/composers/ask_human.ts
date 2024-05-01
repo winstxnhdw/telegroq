@@ -3,7 +3,7 @@ import { Composer } from 'grammy'
 
 const ask_human = new Composer<GrammyContext>()
 
-ask_human.command('ask_human', async (context) => {
+ask_human.command('ask_human', (context) => {
   context.chatAction = 'typing'
   return context.conversation.enter('ask_human')
 })
