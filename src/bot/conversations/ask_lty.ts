@@ -12,7 +12,6 @@ export const ask_lty_conversation =
     })
 
     const question_context = await conversation.waitFor(['message', 'callback_query:data'])
-    await question_context.editMessageReplyMarkup()
 
     if (question_context.callbackQuery?.data === 'cancel') {
       await Promise.all([question_context.deleteMessage(), context.deleteMessage()])

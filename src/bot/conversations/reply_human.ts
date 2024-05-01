@@ -17,7 +17,6 @@ export const reply_human_conversation =
     })
 
     const reply_context = await conversation.waitFor(['message', 'callback_query:data'])
-    await reply_context.editMessageReplyMarkup()
 
     if (reply_context.callbackQuery?.data === 'decline') {
       await Promise.all([reply_context.deleteMessage(), context.reply('You have chosen not to reply to the question.')])
