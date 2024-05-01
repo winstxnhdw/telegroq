@@ -16,6 +16,7 @@ export const ask_lty_conversation =
 
     if (question_context.callbackQuery?.data === 'cancel') {
       await question_context.deleteMessage()
+      await context.deleteMessage()
       await question_context.answerCallbackQuery()
       return
     }
