@@ -7,11 +7,12 @@ export const ask_human_conversation =
   async (conversation: Convo, context: GrammyContext): Promise<void> => {
     await conversation.run(kv(kv_binding))
 
-    await context.reply('What is your question?', {
+    const prompt = await context.reply('What is your question?', {
       reply_markup: new InlineKeyboard().text('Cancel', 'cancel'),
     })
 
     const question_context = await conversation.waitFor(['message', 'callback_query:data'])
+    await context.api.editMessageReplyMarkup(prompt.chat.id, prompt.message_id)
 
     if (question_context.callbackQuery?.data === 'cancel') {
       await Promise.all([question_context.deleteMessage(), context.deleteMessage()])

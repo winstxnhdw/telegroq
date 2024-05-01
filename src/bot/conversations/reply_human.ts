@@ -11,12 +11,14 @@ export const reply_human_conversation =
     }
 
     await conversation.run(kv(kv_binding))
-    await context.reply('What is your answer?', {
+
+    const prompt = await context.reply('What is your answer?', {
       reply_markup: new InlineKeyboard().text('Decline', 'decline'),
       reply_parameters: { message_id: context.msgId },
     })
 
     const reply_context = await conversation.waitFor(['message', 'callback_query:data'])
+    await context.api.editMessageReplyMarkup(prompt.chat.id, prompt.message_id)
 
     if (reply_context.callbackQuery?.data === 'decline') {
       await Promise.all([reply_context.deleteMessage(), context.reply('You have chosen not to reply to the question.')])
