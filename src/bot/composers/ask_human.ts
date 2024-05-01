@@ -33,10 +33,12 @@ ask_human.callbackQuery('do-not-reply-human', async (context): Promise<true> => 
     })
   }
 
-  await context.kv.delete_reply_link(context.member.id, context.msgId)
-  await context.reply('You have chosen not to reply to the question.', {
+  const delete_reply_link = context.kv.delete_reply_link(context.member.id, context.msgId)
+  const send_decline_reply = context.reply('You have chosen not to reply to the question.', {
     reply_parameters: { message_id: Number(context.callbackQuery.id) },
   })
+
+  await Promise.all([delete_reply_link, send_decline_reply])
 
   return context.answerCallbackQuery()
 })

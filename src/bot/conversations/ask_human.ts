@@ -15,8 +15,7 @@ export const ask_human_conversation =
     await question_context.editMessageReplyMarkup()
 
     if (question_context.callbackQuery?.data === 'cancel') {
-      await question_context.deleteMessage()
-      await context.deleteMessage()
+      await Promise.all([question_context.deleteMessage(), context.deleteMessage()])
       await question_context.answerCallbackQuery()
       return
     }
@@ -55,6 +54,8 @@ export const ask_human_conversation =
       timestamp: await conversation.now(),
     }
 
-    await conversation.external(() => context.kv.put_reply_link(user_id, reply_link))
-    await context.reply('Your question has been sent to a human expert 🧑‍🔬')
+    await Promise.all([
+      conversation.external(() => context.kv.put_reply_link(user_id, reply_link)),
+      context.reply('Your question has been sent to a human expert 🧑‍🔬'),
+    ])
   }

@@ -20,8 +20,7 @@ export const reply_human_conversation =
     await reply_context.editMessageReplyMarkup()
 
     if (reply_context.callbackQuery?.data === 'decline') {
-      await reply_context.deleteMessage()
-      await context.reply('You have chosen not to reply to the question.')
+      await Promise.all([reply_context.deleteMessage(), context.reply('You have chosen not to reply to the question.')])
       await reply_context.answerCallbackQuery()
       return
     }
@@ -34,10 +33,13 @@ export const reply_human_conversation =
       return
     }
 
-    await conversation.external(() => context.kv.delete_reply_link(context.member.id, reply.sent_question_id))
-    await reply_context.copyMessage(reply.inquirer_user_id, {
+    const delete_reply_link = conversation.external(() =>
+      context.kv.delete_reply_link(context.member.id, reply.sent_question_id),
+    )
+
+    const copy_message_to_expert = reply_context.copyMessage(reply.inquirer_user_id, {
       reply_parameters: { message_id: reply.original_question_id },
     })
 
-    await context.reply('Your answer has been sent.')
+    await Promise.all([delete_reply_link, copy_message_to_expert, context.reply('Your answer has been sent.')])
   }
