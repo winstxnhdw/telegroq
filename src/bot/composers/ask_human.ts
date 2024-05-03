@@ -4,12 +4,10 @@ import { Composer } from 'grammy'
 const ask_human = new Composer<GrammyContext>()
 
 ask_human.command('ask_human', (context) => {
-  context.chatAction = 'typing'
   return context.conversation.enter('ask_human')
 })
 
 ask_human.callbackQuery('reply-human', async (context) => {
-  context.chatAction = 'typing'
   await context.editMessageReplyMarkup()
   await context.answerCallbackQuery()
 
@@ -17,7 +15,6 @@ ask_human.callbackQuery('reply-human', async (context) => {
 })
 
 ask_human.callbackQuery('do-not-reply-human', async (context): Promise<true> => {
-  context.chatAction = 'typing'
   await context.editMessageReplyMarkup()
 
   if (!context.msgId) {

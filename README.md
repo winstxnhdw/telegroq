@@ -25,8 +25,6 @@
 
 ## Development
 
-Install all dependencies.
-
 Setup environment variables.
 
 ```bash
@@ -36,6 +34,8 @@ Setup environment variables.
   echo "AUTH_TOKEN=$AUTH_TOKEN"
 } >> .dev.vars
 ```
+
+Install all dependencies.
 
 ```bash
 bun install
