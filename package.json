@@ -18,7 +18,7 @@
     "hono": "^4.3.2",
     "marked": "^12.0.2",
     "tslib": "^2.6.2",
-    "zod": "^3.23.6"
+    "zod": "^3.23.7"
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
