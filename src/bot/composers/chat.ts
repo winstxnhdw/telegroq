@@ -39,7 +39,8 @@ chat.on('message:text', async (context) => {
   // const message_to_store = total_tokens && total_tokens > 8192 ? await summarise_context(context, messages) : messages
   await context.kv.put_history(context.member.username, messages)
 
-  return context.replyWithHTML(await parseInline(response))
+  const parsed_response = await parseInline(response)
+  return context.replyWithHTML(parsed_response.substring(0, 4096))
 })
 
 export { chat }
