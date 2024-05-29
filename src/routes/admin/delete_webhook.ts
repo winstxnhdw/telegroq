@@ -52,6 +52,6 @@ export const delete_webhook = new OpenAPIHono().openapi(route, async (context) =
   const request = await send_delete_webhook_request(config.BOT_TOKEN)
 
   return request
-    ? context.json({ message: 'The Telegram webhook endpoint has been deleted!' } as const)
+    ? context.json({ message: 'The Telegram webhook endpoint has been deleted!' } as const, 200)
     : context.json({ error: 'Failed to delete the webhook!' } as const, 500)
 })

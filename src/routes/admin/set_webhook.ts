@@ -63,6 +63,6 @@ export const set_webhook = new OpenAPIHono().openapi(route, async (context) => {
   const webhook_url = await send_set_webhook_request(config.BOT_TOKEN, context.req.url, '/telegram')
 
   return webhook_url
-    ? context.json({ message: `${webhook_url} has been successfully set as the Telegram webhook endpoint!` })
+    ? context.json({ message: `${webhook_url} has been successfully set as the Telegram webhook endpoint!` }, 200)
     : context.json({ error: 'Failed to set the webhook!' } as const, 500)
 })

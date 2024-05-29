@@ -49,11 +49,11 @@ export const add_admin = new OpenAPIHono<HonoContext>().openapi(route, async (co
   const username = context.req.query('user')
 
   if (!username) {
-    return context.json({ error: 'Invalid username!' }, 500)
+    return context.json({ error: 'Invalid username!' } as const, 500)
   }
 
   const admins = await context.env.telegroq.get('admins', 'text')
   await context.env.telegroq.put('admins', `${username}\n${admins ?? ''}`)
 
-  return context.json({ message: `Successfully added ${username} to the list of admins!` })
+  return context.json({ message: `Successfully added ${username} to the list of admins!` }, 200)
 })

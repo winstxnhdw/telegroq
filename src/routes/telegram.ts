@@ -3,6 +3,6 @@ import type { HonoContext } from '@/types'
 import { webhookCallback } from 'grammy'
 import { Hono } from 'hono'
 
-export const telegram = new Hono<HonoContext>().post('/telegram', async (context) =>
+export const telegram = new Hono<HonoContext>().post('/telegram', (context) =>
   webhookCallback(bot_factory(context.env), 'hono')(context),
 )
