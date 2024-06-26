@@ -11,7 +11,7 @@ export const ask_all_conversation =
     const current_timestamp = await conversation.now()
 
     if (last_ask_all_timestamp && current_timestamp - last_ask_all_timestamp < 86400000) {
-      await context.reply('You can only ask all once a day.')
+      await context.reply('You can only use this command once a day.')
       return
     }
 
