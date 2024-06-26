@@ -4,7 +4,7 @@ import { Composer } from 'grammy'
 const ask_all = new Composer<GrammyContext>()
 
 ask_all.command('ask_all', (context) => {
-  context.conversation.enter('ask_all')
+  return context.conversation.enter('ask_all')
 })
 
 export { ask_all }
