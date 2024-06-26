@@ -8,8 +8,9 @@ export const ask_all_conversation =
     await conversation.run(kv(kv_binding))
 
     const last_ask_all_timestamp = await context.kv.get_ask_all_timestamp(context.member.id)
+    const current_timestamp = await conversation.now()
 
-    if (last_ask_all_timestamp && Date.now() - last_ask_all_timestamp < 86400000) {
+    if (last_ask_all_timestamp && current_timestamp - last_ask_all_timestamp < 86400000) {
       await context.reply('You can only ask all once a day.')
       return
     }
@@ -61,7 +62,7 @@ export const ask_all_conversation =
     )
 
     await Promise.all([
-      context.kv.put_ask_all_timestamp(context.member.id, Date.now()),
+      context.kv.put_ask_all_timestamp(context.member.id, current_timestamp),
       context.reply('Your question has been sent to every human expert 🧑‍🔬'),
     ])
   }
