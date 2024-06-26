@@ -1,3 +1,4 @@
+export { ask_all } from '@/bot/composers/ask_all'
 export { ask_human } from '@/bot/composers/ask_human'
 export { ask_lty } from '@/bot/composers/ask_lty'
 export { chat } from '@/bot/composers/chat'
