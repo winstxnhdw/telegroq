@@ -62,4 +62,18 @@ export class KV {
     const new_replies = replies.filter((reply) => reply.sent_question_id !== sent_question_id)
     await this.put_reply_links(id, new_replies)
   }
+
+  async get_ask_all_timestamp(id: number | string): Promise<number | undefined> {
+    const timestamp = await this.kv.get(`ask_all:${id}`, 'text')
+
+    if (!timestamp) {
+      return undefined
+    }
+
+    return Number(timestamp)
+  }
+
+  async put_ask_all_timestamp(id: number | string, timestamp: number): Promise<void> {
+    await this.kv.put(`ask_all:${id}`, timestamp.toString())
+  }
 }
