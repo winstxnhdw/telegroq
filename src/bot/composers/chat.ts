@@ -20,7 +20,7 @@ chat.on('message:text', async (context) => {
   const system = await context.kv.get_system_prompt(context.member.username)
   const system_prompt = { role: 'system', content: system } as const
   const question_prompt = { role: 'user', content: context.message.text } as const
-  const history = await context.kv.get_history(context.member.username)
+  const history = await context.kv.get_history(context.member.id)
   const messages = history ? [system_prompt, ...history, question_prompt] : [system_prompt, question_prompt]
 
   const chat_completion = await context.groq.chat.completions.create({
@@ -39,7 +39,7 @@ chat.on('message:text', async (context) => {
 
   const total_tokens = chat_completion.usage?.total_tokens
   const message_to_store = total_tokens && total_tokens > 8192 ? await summarise_context(context, messages) : messages
-  await context.kv.put_history(context.member.username, message_to_store)
+  await context.kv.put_history(context.member.id, message_to_store)
 
   const parsed_response = await parseInline(response)
   return context.replyWithHTML(parsed_response.substring(0, 4096))

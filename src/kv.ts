@@ -20,16 +20,16 @@ export class KV {
     await this.kv.put(`id:${username}`, id.toString())
   }
 
-  async get_history(username: string): Promise<Message[] | null> {
-    return this.kv.get(`history:${username}`, 'json')
+  async get_history(id: number | string): Promise<Message[] | null> {
+    return this.kv.get(`history:${id}`, 'json')
   }
 
-  async put_history(username: string, messages: Message[]): Promise<void> {
-    await this.kv.put(`history:${username}`, JSON.stringify(messages))
+  async put_history(id: number | string, messages: Message[]): Promise<void> {
+    await this.kv.put(`history:${id}`, JSON.stringify(messages))
   }
 
-  async delete_history(username: string): Promise<void> {
-    await this.kv.delete(`history:${username}`)
+  async delete_history(id: number | string): Promise<void> {
+    await this.kv.delete(`history:${id}`)
   }
 
   async get_system_prompt(username: string): Promise<string> {
