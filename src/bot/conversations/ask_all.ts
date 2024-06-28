@@ -20,7 +20,6 @@ export const ask_all_conversation =
     })
 
     const question_context = await conversation.waitFor(['message', 'callback_query:data'])
-    const message_id = question_context.msgId
     await context.api.editMessageReplyMarkup(prompt.chat.id, prompt.message_id)
 
     if (question_context.callbackQuery?.data === 'cancel') {
@@ -28,6 +27,8 @@ export const ask_all_conversation =
       await question_context.answerCallbackQuery()
       return
     }
+
+    const message_id = question_context.msgId
 
     if (!message_id) {
       await context.reply('Unable to find the question. Please try again later.')
