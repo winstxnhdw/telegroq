@@ -15,7 +15,7 @@
     "@hono/zod-openapi": "^0.14.9",
     "grammy": "^1.27.0",
     "groq-sdk": "^0.5.0",
-    "hono": "^4.4.13",
+    "hono": "^4.5.0",
     "marked": "^13.0.2",
     "tslib": "^2.6.3",
     "zod": "^3.23.8"
@@ -25,7 +25,7 @@
     "@cloudflare/workers-types": "^4.20240712.0",
     "bun-types": "^1.1.20",
     "typescript": "^5.5.3",
-    "wrangler": "^3.64.0"
+    "wrangler": "^3.65.0"
   },
   "overrides": {
     "o-son": "npm:@ponomarevlad/o-son@1.0.1-web.1"
