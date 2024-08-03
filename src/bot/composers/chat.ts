@@ -25,7 +25,7 @@ chat.on('message:text', async (context) => {
 
   const chat_completion = await context.groq.chat.completions.create({
     messages: messages,
-    model: 'llama3-70b-8192',
+    model: 'llama-3.1-70b-versatile',
   })
 
   const response = chat_completion.choices[0]?.message.content
