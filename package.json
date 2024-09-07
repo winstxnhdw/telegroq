@@ -23,7 +23,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
     "@cloudflare/workers-types": "^4.20240903.0",
-    "bun-types": "^1.1.26",
+    "bun-types": "^1.1.27",
     "typescript": "^5.5.4",
     "wrangler": "^3.75.0"
   },
