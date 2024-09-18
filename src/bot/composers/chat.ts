@@ -9,10 +9,10 @@ const summarise_context = async (context: GrammyContext, messages: Message[]): P
 
   const result = await context.env.ai.run('@cf/facebook/bart-large-cnn', {
     input_text: context_to_summarise,
-    max_length: 4096,
+    max_length: 8192,
   })
 
-  return [{ role: 'system', content: result.summary }]
+  return [{ role: 'assistant', content: result.summary }]
 }
 
 chat.on('message:text', async (context) => {
@@ -34,12 +34,12 @@ chat.on('message:text', async (context) => {
     return context.reply('There was an error with the chat bot!')
   }
 
-  messages.push({ role: 'assistant', content: response })
   messages.shift()
+  messages.push({ role: 'assistant', content: response })
 
   const total_tokens = chat_completion.usage?.total_tokens
-  const message_to_store = total_tokens && total_tokens > 8192 ? await summarise_context(context, messages) : messages
-  await context.kv.put_history(context.member.id, message_to_store)
+  const messages_to_store = total_tokens && total_tokens > 16384 ? await summarise_context(context, messages) : messages
+  await context.kv.put_history(context.member.id, messages_to_store)
 
   const parsed_response = await parseInline(response)
   return context.replyWithHTML(parsed_response.substring(0, 4096))
