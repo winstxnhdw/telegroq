@@ -8,7 +8,7 @@
 
 ## Features
 
-- Question answering with `llama3-70b`
+- Question answering with `llama-3.3-70b-versatile`
 - Random and anonymous question answering with fellow invitees
 - Anonymous question answering with [LTYGUY](https://github.com/LTYGUY/)
 - Secured endpoints for adding and removing members/admins
