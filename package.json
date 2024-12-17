@@ -25,7 +25,7 @@
     "@cloudflare/workers-types": "^4.20241216.0",
     "bun-types": "^1.1.39",
     "typescript": "^5.7.2",
-    "wrangler": "^3.96.0"
+    "wrangler": "^3.97.0"
   },
   "overrides": {
     "o-son": "npm:@ponomarevlad/o-son@1.0.1-web.1"
