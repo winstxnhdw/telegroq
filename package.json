@@ -12,7 +12,7 @@
     "@grammyjs/parse-mode": "^1.11.1",
     "@grammyjs/storage-cloudflare": "^2.4.2",
     "@hono/swagger-ui": "^0.5.0",
-    "@hono/zod-openapi": "^0.18.3",
+    "@hono/zod-openapi": "^0.18.4",
     "grammy": "^1.34.1",
     "groq-sdk": "^0.14.0",
     "hono": "^4.6.20",
