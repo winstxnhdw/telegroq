@@ -22,10 +22,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@cloudflare/workers-types": "^4.20250214.0",
+    "@cloudflare/workers-types": "^4.20250224.0",
     "bun-types": "^1.2.3",
     "typescript": "^5.7.3",
-    "wrangler": "^3.109.2"
+    "wrangler": "^3.109.3"
   },
   "overrides": {
     "o-son": "npm:@ponomarevlad/o-son@1.0.1-web.1"
