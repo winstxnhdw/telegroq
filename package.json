@@ -16,13 +16,13 @@
     "grammy": "^1.36.1",
     "groq-sdk": "^0.20.1",
     "hono": "^4.7.7",
-    "marked": "^15.0.10",
+    "marked": "^15.0.11",
     "tslib": "^2.8.1",
     "zod": "^3.24.3"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@cloudflare/workers-types": "^4.20250424.0",
+    "@cloudflare/workers-types": "^4.20250425.0",
     "bun-types": "^1.2.10",
     "typescript": "^5.8.3",
     "wrangler": "^4.13.1"
