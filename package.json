@@ -12,7 +12,7 @@
     "@grammyjs/parse-mode": "^2.1.2",
     "@grammyjs/storage-cloudflare": "^2.4.2",
     "@hono/swagger-ui": "^0.5.1",
-    "@hono/zod-openapi": "^0.19.6",
+    "@hono/zod-openapi": "^0.19.7",
     "grammy": "^1.36.3",
     "groq-sdk": "^0.22.0",
     "hono": "^4.7.10",
@@ -25,7 +25,7 @@
     "@cloudflare/workers-types": "^4.20250525.0",
     "bun-types": "^1.2.14",
     "typescript": "^5.8.3",
-    "wrangler": "^4.16.1"
+    "wrangler": "^4.17.0"
   },
   "overrides": {
     "o-son": "npm:@ponomarevlad/o-son@1.0.1-web.1"
