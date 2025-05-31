@@ -45,5 +45,5 @@ export const remove_admin = new OpenAPIHono<HonoContext>().openapi(route, async 
 
   await context.env.telegroq.put('admins', new_admins ?? '')
 
-  return context.json({ message: `${username} has been removed from the list of admins!` })
+  return context.json({ message: `${username} has been removed from the list of admins!` }, 200)
 })

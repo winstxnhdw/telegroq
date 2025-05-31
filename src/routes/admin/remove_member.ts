@@ -45,5 +45,5 @@ export const remove_member = new OpenAPIHono<HonoContext>().openapi(route, async
 
   await context.env.telegroq.put('members', new_members ?? '')
 
-  return context.json({ message: `${username} has been removed from the list of members!` })
+  return context.json({ message: `${username} has been removed from the list of members!` }, 200)
 })
