@@ -11,7 +11,7 @@
     "@grammyjs/conversations": "^2.1.0",
     "@grammyjs/parse-mode": "1.11.1",
     "@grammyjs/storage-cloudflare": "^2.4.2",
-    "@hono/swagger-ui": "^0.5.1",
+    "@hono/swagger-ui": "^0.5.2",
     "@hono/zod-openapi": "^0.19.8",
     "grammy": "^1.36.3",
     "groq-sdk": "^0.23.0",
