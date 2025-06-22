@@ -21,11 +21,13 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@cloudflare/workers-types": "4.20250617.0",
-    "bun-types": "1.2.16",
-    "typescript": "5.8.3",
+    "@biomejs/biome": "2.0.4",
+    "@cloudflare/workers-types": "latest",
+    "@types/bun": "latest",
     "wrangler": "4.20.0"
+  },
+  "peerDependencies": {
+    "typescript": "5.8.3"
   },
   "overrides": {
     "o-son": "npm:@ponomarevlad/o-son@1.0.1-web.1"
