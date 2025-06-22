@@ -1,5 +1,5 @@
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { HonoContext } from '@/types'
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 
 const QuerySchema = z.object({
   user: z.string(),

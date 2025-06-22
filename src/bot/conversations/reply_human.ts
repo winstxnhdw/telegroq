@@ -1,6 +1,6 @@
+import { InlineKeyboard } from 'grammy'
 import { kv } from '@/bot/middlewares'
 import type { Convo, GrammyContext } from '@/bot/types'
-import { InlineKeyboard } from 'grammy'
 
 export const reply_human_conversation =
   (kv_binding: KVNamespace) =>

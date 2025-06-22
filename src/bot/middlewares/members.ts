@@ -1,6 +1,6 @@
+import type { Context, NextFunction } from 'grammy'
 import type { Member } from '@/bot/types'
 import type { Bindings } from '@/types'
-import type { Context, NextFunction } from 'grammy'
 
 const is_not_member = async (kv: KVNamespace, username: string): Promise<boolean> => {
   const usernames = await kv.get('members', 'text')

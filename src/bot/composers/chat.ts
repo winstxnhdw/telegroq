@@ -1,6 +1,6 @@
-import type { GrammyContext, Message } from '@/bot/types'
 import { Composer } from 'grammy'
 import { parseInline } from 'marked'
+import type { GrammyContext, Message } from '@/bot/types'
 
 const chat = new Composer<GrammyContext>()
 

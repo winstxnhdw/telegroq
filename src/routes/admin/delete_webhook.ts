@@ -1,7 +1,7 @@
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { Bot } from 'grammy'
 import { bot_info } from '@/bot'
 import { get_config } from '@/config'
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
-import { Bot } from 'grammy'
 
 const ResponseSchema = z.object({
   message: z.literal('The Telegram webhook endpoint has been deleted!'),
