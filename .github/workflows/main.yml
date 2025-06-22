@@ -1,8 +1,6 @@
 name: Test
 
 on:
-  pull_request_target:
-    types: opened
   push:
     paths:
       - .github/workflows/main.yml
