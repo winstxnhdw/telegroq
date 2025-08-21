@@ -25,7 +25,7 @@ chat.on('message:text', async (context) => {
 
   const chat_completion = await context.groq.chat.completions.create({
     messages: messages,
-    model: 'gpt-oss-20b',
+    model: 'openai/gpt-oss-20b',
   })
 
   const response = chat_completion.choices[0]?.message.content
