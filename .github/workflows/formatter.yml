@@ -14,4 +14,4 @@ permissions:
 
 jobs:
   format:
-    uses: winstxnhdw/actions/.github/workflows/format-bun.yml@main
+    uses: winstxnhdw/actions/.github/workflows/format-biome.yml@main
