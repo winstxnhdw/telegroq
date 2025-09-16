@@ -9,4 +9,5 @@ export const bot_info: UserFromGetMe = {
   can_read_all_group_messages: false,
   supports_inline_queries: false,
   can_connect_to_business: false,
+  has_main_web_app: true,
 }
