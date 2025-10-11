@@ -8,7 +8,7 @@
 
 ## Features
 
-- Question answering with `llama-3.3-70b-versatile`
+- Question answering with `openai/gpt-oss-20b`
 - Random and anonymous question answering with fellow invitees
 - Anonymous question answering with [LTYGUY](https://github.com/LTYGUY/)
 - Secured endpoints for adding and removing members/admins
