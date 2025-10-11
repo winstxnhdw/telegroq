@@ -25,7 +25,7 @@
 
 ## Development
 
-Setup environment variables.
+Setup environment variables. You can learn how to get your bot token from [here](https://core.telegram.org/bots/tutorial#obtain-your-bot-token).
 
 ```bash
 {
