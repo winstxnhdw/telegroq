@@ -1,7 +1,7 @@
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { prettyJSON } from 'hono/pretty-json'
-import { admin, telegram } from '@/routes'
+import { admin, telegram, telegram_file } from '@/routes'
 
 function main() {
   const openapi_documentation_route = '/openapi.json'
@@ -18,6 +18,7 @@ function main() {
     .get('/docs', swaggerUI({ url: openapi_documentation_route }))
     .route('/', admin)
     .route('/', telegram)
+    .route('/', telegram_file)
 }
 
 export default main()

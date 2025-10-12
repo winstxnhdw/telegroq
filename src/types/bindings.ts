@@ -16,4 +16,5 @@ type AI = {
 export type Bindings = ReturnType<typeof get_config> & {
   telegroq: KVNamespace
   ai: AI
+  BOT_URL: string
 }

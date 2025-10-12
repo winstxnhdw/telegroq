@@ -68,8 +68,6 @@ chat.on('message:text', async (context) => {
 chat.on('message:photo', async (context) => {
   context.chatAction = 'typing'
 
-  const file = await context.getFile()
-
   const messages = aggregate_prompts(
     await context.kv.get_history(context.member.id),
     await context.kv.get_system_prompt(context.member.id),
@@ -81,12 +79,12 @@ chat.on('message:photo', async (context) => {
     text: context.message.caption || 'Respond based on the image below.',
   } as const
 
-  const image_content = {
-    type: 'image_url',
-    image_url: { url: file.getUrl() },
-  } as const
+  const photos = context.message.photo.map(({ file_id }) => file_id)
+  const image_contents = photos.map(
+    (file_id) => ({ type: 'image_url', image_url: { url: `${context.env.BOT_URL}/file/${file_id}` } }) as const,
+  )
 
-  messages.push({ role: 'user', content: [text_content, image_content] })
+  messages.push({ role: 'user', content: [text_content, ...image_contents] })
 
   const chat_completion = await context.groq.chat.completions.create({
     messages: messages,
@@ -116,16 +114,17 @@ chat.on('message:photo', async (context) => {
 chat.on(['message:voice', 'message:audio'], async (context) => {
   context.chatAction = 'typing'
 
-  const file = await context.getFile()
+  const audio = context.message.voice ?? context.message.audio
   const audio_completion = await context.groq.audio.transcriptions.create({
     model: 'whisper-large-v3-turbo',
-    url: file.getUrl(),
+    url: `${context.env.BOT_URL}/file/${audio.file_id}`,
   })
 
+  const caption = context.message.caption ? `${context.message.caption}\n\n` : ''
   const messages = aggregate_prompts(
     await context.kv.get_history(context.member.id),
     await context.kv.get_system_prompt(context.member.id),
-    audio_completion.text,
+    `${caption}${audio_completion.text}`,
   )
 
   const chat_completion = await context.groq.chat.completions.create({

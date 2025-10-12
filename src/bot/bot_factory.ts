@@ -1,7 +1,6 @@
 import { autoChatAction } from '@grammyjs/auto-chat-action'
 import { autoRetry } from '@grammyjs/auto-retry'
 import { conversations, createConversation } from '@grammyjs/conversations'
-import { hydrateFiles } from '@grammyjs/files'
 import { hydrateReply } from '@grammyjs/parse-mode'
 import { KvAdapter } from '@grammyjs/storage-cloudflare'
 import { Bot, lazySession } from 'grammy'
@@ -32,7 +31,7 @@ export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
     }),
   )
 
-  bot.api.config.use(autoRetry(), hydrateFiles(config.BOT_TOKEN))
+  bot.api.config.use(autoRetry())
   bot.use(
     hydrateReply,
     autoChatAction(bot.api),
