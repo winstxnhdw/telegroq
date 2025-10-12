@@ -52,7 +52,10 @@ export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
     chat,
   )
 
-  bot.catch(console.error)
+  bot.errorBoundary((error) => {
+    console.error(error)
+    error.ctx.reply('An error occurred. Please try again later.')
+  })
 
   return bot
 }

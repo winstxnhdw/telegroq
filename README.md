@@ -42,8 +42,17 @@ Install all dependencies.
 bun install
 ```
 
-Run the development server.
+You can run the Cloudflare Workers development server with the following.
+
+> [!WARNING]\
+> You will need to establish a webhook connection to your server for the bot to work in this mode. If you do not know how to do this, use the `dev-bot` command for long polling instead.
 
 ```bash
 bun dev
+```
+
+If you want to test the Telegram bot with long polling, you will have to run the following instead.
+
+```bash
+bun dev-bot
 ```
