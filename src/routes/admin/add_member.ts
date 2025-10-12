@@ -14,8 +14,8 @@ const ResponseErrorSchema = z.object({
 })
 
 const route = createRoute({
-  method: 'get',
-  path: '/add_member',
+  method: 'put',
+  path: '/member',
   security: [{ Bearer: [] }],
   request: { query: QuerySchema },
   responses: {

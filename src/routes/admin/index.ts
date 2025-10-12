@@ -16,12 +16,12 @@ admin.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
 })
 
 admin
-  .use('/admin/*', bearerAuth({ verifyToken: (token, context) => token === context.env.AUTH_TOKEN }))
-  .route('/admin', set_webhook)
-  .route('/admin', delete_webhook)
-  .route('/admin', add_member)
-  .route('/admin', remove_member)
-  .route('/admin', add_admin)
-  .route('/admin', remove_admin)
+  .use('/secure/*', bearerAuth({ verifyToken: (token, context) => token === context.env.AUTH_TOKEN }))
+  .route('/secure', set_webhook)
+  .route('/secure', delete_webhook)
+  .route('/secure', add_member)
+  .route('/secure', remove_member)
+  .route('/secure', add_admin)
+  .route('/secure', remove_admin)
 
 export { admin }

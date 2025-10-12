@@ -10,8 +10,8 @@ const ResponseSchema = z.object({
 })
 
 const route = createRoute({
-  method: 'get',
-  path: '/remove_member',
+  method: 'delete',
+  path: '/member',
   request: { query: QuerySchema },
   security: [{ Bearer: [] }],
   responses: {

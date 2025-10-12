@@ -12,8 +12,8 @@ const ResponseErrorSchema = z.object({
 })
 
 const route = createRoute({
-  method: 'get',
-  path: '/delete_webhook',
+  method: 'delete',
+  path: '/webhook',
   security: [{ Bearer: [] }],
   responses: {
     200: {
