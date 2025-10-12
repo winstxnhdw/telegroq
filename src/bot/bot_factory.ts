@@ -31,7 +31,7 @@ export const bot_factory = (environment: Bindings): Bot<GrammyContext> => {
     }),
   )
 
-  bot.api.config.use(autoRetry())
+  bot.api.config.use(autoRetry({ maxRetryAttempts: 3 }))
   bot.use(
     hydrateReply,
     autoChatAction(bot.api),
