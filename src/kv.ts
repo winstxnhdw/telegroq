@@ -12,16 +12,18 @@ export class KV {
     return usernames?.split('\n') ?? []
   }
 
-  async get_user_id(username: string): Promise<string | null> {
-    return this.kv.get(`id:${username}`, 'text')
+  async get_user_id(username: string): Promise<string | undefined> {
+    const user_id = await this.kv.get(`id:${username}`, 'text')
+    return user_id ?? undefined
   }
 
   async put_user_id(username: string, id: number): Promise<void> {
     await this.kv.put(`id:${username}`, id.toString())
   }
 
-  async get_history(id: number | string): Promise<Message[] | null> {
-    return this.kv.get(`history:${id}`, 'json')
+  async get_history(id: number | string): Promise<Message[] | undefined> {
+    const history = await this.kv.get<Message[]>(`history:${id}`, 'json')
+    return history ?? undefined
   }
 
   async put_history(id: number | string, messages: Message[]): Promise<void> {
@@ -32,9 +34,9 @@ export class KV {
     await this.kv.delete(`history:${id}`)
   }
 
-  async get_system_prompt(username: string): Promise<string> {
-    const system_prompt = await this.kv.get(`system:${username}`, 'text')
-    return system_prompt ?? ''
+  async get_system_prompt(id: number | string): Promise<string | undefined> {
+    const system_prompt = await this.kv.get(`system:${id}`, 'text')
+    return system_prompt ?? undefined
   }
 
   async get_reply_links(id: number | string): Promise<Reply[]> {
