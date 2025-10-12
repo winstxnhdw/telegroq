@@ -79,10 +79,11 @@ chat.on('message:photo', async (context) => {
     text: context.message.caption || 'Respond based on the image below.',
   } as const
 
-  const photos = context.message.photo.map(({ file_id }) => file_id)
-  const image_contents = photos.map(
-    (file_id) => ({ type: 'image_url', image_url: { url: `${context.env.BOT_URL}/file/${file_id}` } }) as const,
-  )
+  const photos = await Promise.all(context.message.photo.map(({ file_id }) => context.api.getFile(file_id)))
+  const image_contents = photos
+    .map(({ file_path }) => file_path)
+    .filter(Boolean)
+    .map((path) => ({ type: 'image_url', image_url: { url: `${context.env.BOT_URL}/file/${path}` } }) as const)
 
   messages.push({ role: 'user', content: [text_content, ...image_contents] })
 
@@ -114,10 +115,10 @@ chat.on('message:photo', async (context) => {
 chat.on(['message:voice', 'message:audio'], async (context) => {
   context.chatAction = 'typing'
 
-  const audio = context.message.voice ?? context.message.audio
+  const audio = await context.getFile()
   const audio_completion = await context.groq.audio.transcriptions.create({
     model: 'whisper-large-v3-turbo',
-    url: `${context.env.BOT_URL}/file/${audio.file_id}`,
+    url: `${context.env.BOT_URL}/file/${audio.file_path}`,
   })
 
   const caption = context.message.caption ? `${context.message.caption}\n\n` : ''
