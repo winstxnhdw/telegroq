@@ -115,7 +115,7 @@ chat.on('message:photo', async (context) => {
     : context.replyWithHTML(parsed_response)
 })
 
-chat.on('message:audio', async (context) => {
+chat.on(['message:voice', 'message:audio'], async (context) => {
   context.chatAction = 'typing'
 
   const file = await context.getFile()
