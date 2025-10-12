@@ -7,7 +7,7 @@ const ParamsSchema = z.object({
 
 const route = createRoute({
   method: 'get',
-  path: '/file/{file-path}',
+  path: '/file/:file-path{.+}',
   request: { params: ParamsSchema },
   responses: {
     200: { description: 'The response from the endpoint.' },

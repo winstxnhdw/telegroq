@@ -46,11 +46,13 @@ const send_set_webhook_request = async (
   bot_token: string,
   url: string,
   path: `/${string}`,
-): Promise<string | undefined> => {
-  const webhook_url = `${new URL(url).origin}${path}`
+): Promise<URL | undefined> => {
+  const webhook_url = new URL(url)
+  webhook_url.protocol = 'https:'
+  webhook_url.pathname = path
 
   try {
-    await new Bot(bot_token, { botInfo: bot_info }).api.setWebhook(webhook_url)
+    await new Bot(bot_token, { botInfo: bot_info }).api.setWebhook(webhook_url.toString())
   } catch {
     return undefined
   }
