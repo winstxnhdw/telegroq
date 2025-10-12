@@ -21,9 +21,9 @@ export class KV {
     await this.kv.put(`id:${username}`, id.toString())
   }
 
-  async get_history(id: number | string): Promise<Message[] | undefined> {
+  async get_history(id: number | string): Promise<Message[]> {
     const history = await this.kv.get<Message[]>(`history:${id}`, 'json')
-    return history ?? undefined
+    return history ?? []
   }
 
   async put_history(id: number | string, messages: Message[]): Promise<void> {

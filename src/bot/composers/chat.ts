@@ -15,28 +15,26 @@ const summarise_context = async (context: GrammyContext, messages: Message[]): P
   return [{ role: 'assistant', content: result.summary }]
 }
 
-const get_history = (
-  history: Message[] | undefined,
+const aggregate_prompts = (
+  history: Message[],
   system_prompt: string | undefined,
   question_prompt: string | undefined,
 ): Message[] => {
-  const messages = history ?? []
-
   if (system_prompt) {
-    messages.unshift({ role: 'system', content: system_prompt })
+    history.unshift({ role: 'system', content: system_prompt })
   }
 
   if (question_prompt) {
-    messages.push({ role: 'user', content: question_prompt })
+    history.push({ role: 'user', content: question_prompt })
   }
 
-  return messages
+  return history
 }
 
 chat.on('message:text', async (context) => {
   context.chatAction = 'typing'
 
-  const messages = get_history(
+  const messages = aggregate_prompts(
     await context.kv.get_history(context.member.id),
     await context.kv.get_system_prompt(context.member.id),
     context.message.text,
@@ -72,7 +70,7 @@ chat.on('message:photo', async (context) => {
 
   const file = await context.getFile()
 
-  const messages = get_history(
+  const messages = aggregate_prompts(
     await context.kv.get_history(context.member.id),
     await context.kv.get_system_prompt(context.member.id),
     undefined,
@@ -124,7 +122,7 @@ chat.on(['message:voice', 'message:audio'], async (context) => {
     url: file.getUrl(),
   })
 
-  const messages = get_history(
+  const messages = aggregate_prompts(
     await context.kv.get_history(context.member.id),
     await context.kv.get_system_prompt(context.member.id),
     audio_completion.text,
