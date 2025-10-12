@@ -8,6 +8,7 @@
 
 ## Features
 
+- Supports multimodal inputs, including text, image and audio
 - Question answering with `openai/gpt-oss-20b`
 - Random and anonymous question answering with fellow invitees
 - Anonymous question answering with [LTYGUY](https://github.com/LTYGUY/)

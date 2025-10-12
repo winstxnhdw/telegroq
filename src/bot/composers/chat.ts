@@ -115,4 +115,44 @@ chat.on('message:photo', async (context) => {
     : context.replyWithHTML(parsed_response)
 })
 
+chat.on('message:audio', async (context) => {
+  context.chatAction = 'typing'
+
+  const file = await context.getFile()
+  const audio_completion = await context.groq.audio.transcriptions.create({
+    model: 'whisper-large-v3-turbo',
+    url: file.getUrl(),
+  })
+
+  const messages = get_history(
+    await context.kv.get_history(context.member.id),
+    await context.kv.get_system_prompt(context.member.id),
+    audio_completion.text,
+  )
+
+  const chat_completion = await context.groq.chat.completions.create({
+    messages: messages,
+    model: 'openai/gpt-oss-20b',
+  })
+
+  const response = chat_completion.choices[0]?.message.content
+
+  if (!response) {
+    return context.reply('There was an error with the chat bot!')
+  }
+
+  messages.shift()
+  messages.push({ role: 'assistant', content: response })
+
+  const total_tokens = chat_completion.usage?.total_tokens
+  const messages_to_store = total_tokens && total_tokens > 16384 ? await summarise_context(context, messages) : messages
+  await context.kv.put_history(context.member.id, messages_to_store)
+
+  const parsed_response = telegramify(response, 'escape')
+
+  return parsed_response.length <= 4096
+    ? context.replyWithMarkdownV2(parsed_response)
+    : context.replyWithHTML(parsed_response)
+})
+
 export { chat }
