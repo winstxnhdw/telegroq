@@ -1,5 +1,6 @@
 import { Composer } from 'grammy'
 import telegramify from 'telegramify-markdown'
+import { auto_quote } from '@/bot/plugins/auto_quote'
 import type { GrammyContext, Message } from '@/bot/types'
 
 const chat = new Composer<GrammyContext>()
@@ -33,6 +34,7 @@ const aggregate_prompts = (
 
 chat.on('message:text', async (context) => {
   context.chatAction = 'typing'
+  context.api.config.use(auto_quote(context))
 
   const messages = aggregate_prompts(
     await context.kv.get_history(context.member.id),
@@ -67,6 +69,7 @@ chat.on('message:text', async (context) => {
 
 chat.on('message:photo', async (context) => {
   context.chatAction = 'typing'
+  context.api.config.use(auto_quote(context))
 
   const messages = aggregate_prompts(
     await context.kv.get_history(context.member.id),
@@ -79,13 +82,25 @@ chat.on('message:photo', async (context) => {
     text: context.message.caption || 'Respond based on the image below.',
   } as const
 
-  const photos = await Promise.all(context.message.photo.map(({ file_id }) => context.api.getFile(file_id)))
-  const image_contents = photos
-    .map(({ file_path }) => file_path)
-    .filter(Boolean)
-    .map((path) => ({ type: 'image_url', image_url: { url: `${context.env.BOT_URL}/file/${path}` } }) as const)
+  const file_id_with_highest_quality = context.message.photo.at(-1)?.file_id
 
-  messages.push({ role: 'user', content: [text_content, ...image_contents] })
+  if (!file_id_with_highest_quality) {
+    return context.reply('There was an error processing the image!')
+  }
+
+  const photo = await context.api.getFile(file_id_with_highest_quality)
+  const photo_path = photo.file_path
+
+  if (!photo_path) {
+    return context.reply('There was an error retrieving the image from Telegram!')
+  }
+
+  const image_content = {
+    type: 'image_url',
+    image_url: { url: `${context.env.BOT_URL}/file/${photo_path}` },
+  } as const
+
+  messages.push({ role: 'user', content: [text_content, image_content] })
 
   const chat_completion = await context.groq.chat.completions.create({
     messages: messages,
@@ -114,6 +129,7 @@ chat.on('message:photo', async (context) => {
 
 chat.on(['message:voice', 'message:audio'], async (context) => {
   context.chatAction = 'typing'
+  context.api.config.use(auto_quote(context))
 
   const audio = await context.getFile()
   const audio_completion = await context.groq.audio.transcriptions.create({

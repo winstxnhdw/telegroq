@@ -2,7 +2,7 @@
   "scripts": {
     "lint": "biome check .",
     "dev": "wrangler dev",
-    "dev-bot": "bun --env-file=.dev.vars src/index.bot.ts",
+    "dev-bot": "bun --env-file=.dev.vars --watch src/index.bot.ts",
     "deploy": "wrangler deploy",
     "test": "bun test --watch"
   },
