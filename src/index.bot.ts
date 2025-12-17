@@ -231,6 +231,7 @@ function main() {
     BOT_URL: 'https://example.com',
   })
 
+  bot.catch(console.error)
   bot.start()
 }
 
