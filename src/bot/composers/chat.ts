@@ -13,7 +13,10 @@ const summarise_context = async (context: GrammyContext, messages: Message[]): P
     max_length: 8192,
   })
 
-  return [{ role: 'assistant', content: result.summary }]
+  return [
+    { role: 'user', content: 'What have we discussed so far?' },
+    { role: 'assistant', content: result.summary },
+  ]
 }
 
 const aggregate_prompts = (
@@ -21,15 +24,13 @@ const aggregate_prompts = (
   system_prompt: string | undefined,
   question_prompt: string | undefined,
 ): Message[] => {
-  if (system_prompt) {
-    history.unshift({ role: 'system', content: system_prompt })
-  }
+  const messages: Message[] = [{ role: 'system', content: system_prompt || '' }, ...history]
 
   if (question_prompt) {
-    history.push({ role: 'user', content: question_prompt })
+    messages.push({ role: 'user', content: question_prompt })
   }
 
-  return history
+  return messages
 }
 
 chat.on('message:text', async (context) => {
@@ -77,11 +78,8 @@ chat.on('message:photo', async (context) => {
     undefined,
   )
 
-  const text_content = {
-    type: 'text',
-    text: context.message.caption || 'Respond based on the image below.',
-  } as const
-
+  const text_caption = context.message.caption || 'Respond based on the image below.'
+  const text_content = { type: 'text', text: text_caption } as const
   const file_id_with_highest_quality = context.message.photo.at(-1)?.file_id
 
   if (!file_id_with_highest_quality) {
@@ -100,7 +98,8 @@ chat.on('message:photo', async (context) => {
     image_url: { url: `${context.env.BOT_URL}/file/${photo_path}` },
   } as const
 
-  messages.push({ role: 'user', content: [text_content, image_content] })
+  const multimodal_content = [text_content, image_content]
+  messages.push({ role: 'user', content: multimodal_content })
 
   const chat_completion = await context.groq.chat.completions.create({
     messages: messages,
@@ -114,6 +113,8 @@ chat.on('message:photo', async (context) => {
   }
 
   messages.shift()
+  messages.pop()
+  messages.push({ role: 'user', content: text_caption })
   messages.push({ role: 'assistant', content: response })
 
   const total_tokens = chat_completion.usage?.total_tokens
