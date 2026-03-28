@@ -22,7 +22,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.8",
+    "@biomejs/biome": "2.4.9",
     "@cloudflare/workers-types": "latest",
     "@types/bun": "latest",
     "wrangler": "4.77.0"
