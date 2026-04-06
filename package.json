@@ -14,7 +14,7 @@
     "@grammyjs/storage-cloudflare": "^2.4.2",
     "@hono/swagger-ui": "^0.6.1",
     "@hono/zod-openapi": "^1.2.4",
-    "grammy": "^1.41.1",
+    "grammy": "^1.42.0",
     "groq-sdk": "^1.1.2",
     "hono": "^4.12.10",
     "telegramify-markdown": "^1.3.2",
