@@ -28,7 +28,7 @@
     "wrangler": "4.83.0"
   },
   "peerDependencies": {
-    "typescript": "6.0.2"
+    "typescript": "6.0.3"
   },
   "overrides": {
     "o-son": "npm:@ponomarevlad/o-son@1.0.1-web.1"
