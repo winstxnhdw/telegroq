@@ -13,7 +13,7 @@
     "@grammyjs/parse-mode": "1.11.1",
     "@grammyjs/storage-cloudflare": "^2.4.2",
     "@hono/swagger-ui": "^0.6.1",
-    "@hono/zod-openapi": "^1.3.0",
+    "@hono/zod-openapi": "^1.4.0",
     "grammy": "^1.42.0",
     "groq-sdk": "^1.1.2",
     "hono": "^4.12.18",
@@ -22,7 +22,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.14",
+    "@biomejs/biome": "2.4.15",
     "@cloudflare/workers-types": "latest",
     "@types/bun": "latest",
     "wrangler": "4.90.0"
