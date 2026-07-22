@@ -16,7 +16,7 @@
     "@hono/zod-openapi": "^1.5.1",
     "grammy": "^1.45.1",
     "groq-sdk": "^1.3.0",
-    "hono": "^4.12.30",
+    "hono": "^4.12.31",
     "telegramify-markdown": "^1.3.3",
     "tslib": "^2.8.1",
     "zod": "^4.4.3"
